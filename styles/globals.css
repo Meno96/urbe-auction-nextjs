@@ -1,3 +1,153 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/********** Sell Form *************/
+.sc-jTjUTQ.LlhSP {
+    @apply dark:bg-slate-800 !important;
+    @apply transition !important;
+    @apply duration-700 !important;
+    @apply text-gray-900 !important;
+    @apply dark:text-gray-400 !important;
+    @apply shadow-xl !important;
+}
+/*Dev*/
+.sc-hjjlnc.fGqvGa {
+    @apply dark:bg-slate-800 !important;
+    @apply transition !important;
+    @apply duration-700 !important;
+    @apply text-gray-900 !important;
+    @apply dark:text-gray-400 !important;
+    @apply shadow-xl !important;
+}
+
+/*Label*/
+.sc-hTBuwn.fXa-DTB {
+    @apply dark:bg-slate-800 !important;
+    @apply transition !important;
+    @apply duration-700 !important;
+    @apply text-gray-900 !important;
+    @apply dark:text-gray-400 !important;
+}
+/*Dev*/
+.sc-fcCDlF.kDOwvM {
+    @apply dark:bg-slate-800 !important;
+    @apply transition !important;
+    @apply duration-700 !important;
+    @apply text-gray-900 !important;
+    @apply dark:text-gray-400 !important;
+}
+
+/*H3*/
+.sc-dsHJmm.fQoTUF {
+    @apply transition !important;
+    @apply duration-700 !important;
+    @apply text-gray-900 !important;
+    @apply dark:text-gray-400 !important;
+}
+/*Dev*/
+.sc-hsWlPz.eIvJAa {
+    @apply transition !important;
+    @apply duration-700 !important;
+    @apply text-gray-900 !important;
+    @apply dark:text-gray-400 !important;
+}
+
+/********** Update Listing *************/
+/*Dev*/
+.sc-fvEvSO.hIUiwW {
+    @apply dark:bg-slate-800 !important;
+    @apply transition !important;
+    @apply duration-700 !important;
+    @apply text-gray-900 !important;
+    @apply dark:text-gray-400 !important;
+    @apply shadow-xl !important;
+}
+/*Dev*/
+.sc-eVspGN.iGaRAK {
+    @apply dark:bg-slate-800 !important;
+    @apply transition !important;
+    @apply duration-700 !important;
+    @apply text-gray-900 !important;
+    @apply dark:text-gray-400 !important;
+    @apply shadow-xl !important;
+}
+
+/********** Card *************/
+.sc-fnGiBr.dVAuoB {
+    @apply transition !important;
+    @apply duration-700 !important;
+    @apply dark:bg-slate-800 !important;
+    @apply dark:hover:bg-gradient-to-tl !important;
+    @apply from-slate-900 !important;
+    @apply to-slate-700 !important;
+    @apply border-solid !important;
+    @apply border !important;
+    @apply border-gray-200 !important;
+    @apply dark:border-gray-700 !important;
+}
+/*Dev*/
+.sc-iveFHk.kKQXBH {
+    @apply transition !important;
+    @apply duration-700 !important;
+    @apply dark:bg-slate-800 !important;
+    @apply dark:hover:bg-gradient-to-tl !important;
+    @apply from-slate-900 !important;
+    @apply to-slate-700 !important;
+    @apply border-solid !important;
+    @apply border !important;
+    @apply border-gray-200 !important;
+    @apply dark:border-gray-700 !important;
+}
+
+/********** Connect button *************/
+.sc-ilhmMj.lhJPzO {
+    @apply transition !important;
+    @apply duration-700 !important;
+    @apply dark:bg-slate-800 !important;
+}
+/*Dev*/
+.sc-iOeugr.cGUORQ {
+    @apply transition !important;
+    @apply duration-700 !important;
+    @apply dark:bg-slate-800 !important;
+}
+
+/*Address*/
+.sc-hhOBVt.PALAz {
+    @apply transition !important;
+    @apply duration-700 !important;
+    @apply dark:bg-slate-700 !important;
+}
+/*Dev*/
+.sc-jfvxQR.dHjAPt {
+    @apply transition !important;
+    @apply duration-700 !important;
+    @apply dark:bg-slate-700 !important;
+}
+
+/*Span ETH*/
+.sc-kgTSHT.DiaSr {
+    @apply transition !important;
+    @apply duration-700 !important;
+    @apply dark:text-gray-400 !important;
+}
+/*Dev*/
+.sc-eeMvmM.dwplPr {
+    @apply transition !important;
+    @apply duration-700 !important;
+    @apply dark:text-gray-400 !important;
+}
+
+/*Span Address*/
+.sc-gYbzsP.iOeiZr {
+    @apply transition !important;
+    @apply duration-700 !important;
+    @apply dark:text-sky-500 !important;
+}
+/*Dev*/
+.sc-eJDSGI.gUDklI {
+    @apply transition !important;
+    @apply duration-700 !important;
+    @apply dark:text-sky-500 !important;
+}
