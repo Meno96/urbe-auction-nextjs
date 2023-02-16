@@ -18,22 +18,22 @@ export default function UpdateListingModal({
     const handleUpdateListingSuccess = () => {
         dispatch({
             type: "success",
-            message: "listing updated",
-            title: "Listing updated - please refresh (and move blocks)",
+            message: "Bid Placed",
+            title: "Bid Placed - please refresh (and move blocks)",
             position: "topR",
         })
         onClose && onClose()
         setPriceToUpdateListingWith("0")
     }
 
-    const { runContractFunction: updateListing } = useWeb3Contract({
+    const { runContractFunction: placeBid } = useWeb3Contract({
         abi: urbEAuctionAbi,
         contractAddress: urbEAuctionAddress,
-        functionName: "updateListing",
+        functionName: "placeBid",
+        msgValue: ethers.utils.parseEther(priceToUpdateListingWith || "0"),
         params: {
             nftAddress: nftAddress,
             tokenId: tokenId,
-            newPrice: ethers.utils.parseEther(priceToUpdateListingWith || "0"),
         },
     })
 
@@ -44,7 +44,7 @@ export default function UpdateListingModal({
             onCloseButtonPressed={onClose}
             width={"400px"}
             onOk={() => {
-                updateListing({
+                placeBid({
                     onError: (error) => {
                         console.log(error)
                     },

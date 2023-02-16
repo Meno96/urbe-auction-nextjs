@@ -5,11 +5,13 @@ import { useMoralis } from "react-moralis"
 import networkMapping from "../constants/networkMapping.json"
 import GET_ACTIVE_ITEMS from "@/constants/subgraphQueries"
 import { useQuery } from "@apollo/client"
+import NFTBox from "@/components/NFTBox"
 
 export default function Home() {
     const { chainId, isWeb3Enabled } = useMoralis()
     const chainString = chainId ? parseInt(chainId).toString() : null
-    const urbEAuctionAddress = chainId ? networkMapping[chainString].UrbEAuction[0] : null
+    // const lastAddress = networkMapping[chainString].UrbEAuction.length
+    const urbEAuctionAddress = chainId ? networkMapping[chainString].UrbEAuction[4] : null
 
     const { loading, error, data: listedNfts } = useQuery(GET_ACTIVE_ITEMS)
 
@@ -24,7 +26,13 @@ export default function Home() {
                         listedNfts.activeItems.map((nft) => {
                             const { price, nftAddress, tokenId } = nft
                             return urbEAuctionAddress ? (
-                                <div>Ok</div>
+                                <NFTBox
+                                    price={price}
+                                    nftAddress={nftAddress}
+                                    tokenId={tokenId}
+                                    urbEAuctionAddress={urbEAuctionAddress}
+                                    key={`${nftAddress}${tokenId}`}
+                                />
                             ) : (
                                 <div>Network error, please switch to a supported network.</div>
                             )

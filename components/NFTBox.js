@@ -40,15 +40,21 @@ export default function NFTBox({ price, nftAddress, tokenId, urbEAuctionAddress 
         },
     })
 
-    const { runContractFunction: placeBid } = useWeb3Contract({
+    const { runContractFunction: cancelListing } = useWeb3Contract({
         abi: urbEAuctionAbi,
         contractAddress: urbEAuctionAddress,
-        functionName: "placeBid",
-        msgValue: price,
+        functionName: "cancelListing",
         params: {
             nftAddress: nftAddress,
             tokenId: tokenId,
         },
+    })
+
+    const { runContractFunction: getDeployer } = useWeb3Contract({
+        abi: urbEAuctionAbi,
+        contractAddress: urbEAuctionAddress,
+        functionName: "getDeployer",
+        params: {},
     })
 
     async function updateUI() {
@@ -79,20 +85,26 @@ export default function NFTBox({ price, nftAddress, tokenId, urbEAuctionAddress 
         }
     }, [isWeb3Enabled])
 
-    const handleCardClick = () => {
-        isOwnedByUser
-            ? setShowModal(true)
-            : placeBid({
+    const handleCardClick = async () => {
+        const deployer = await getDeployer()
+        console.log(deployer)
+
+        const isDeployer =
+            deployer.toLowerCase() === account.toLowerCase() || deployer === undefined
+        console.log(isDeployer)
+        isDeployer
+            ? cancelListing({
                   onError: (error) => console.log(error),
-                  onSuccess: () => handleBidPlacedSuccess(),
+                  onSuccess: () => handleCancelItemSuccess(),
               })
+            : setShowModal(true)
     }
 
-    const handleBidPlacedSuccess = () => {
+    const handleCancelItemSuccess = () => {
         dispatch({
             type: "success",
-            message: "Bid placed!",
-            title: "Bid placed",
+            message: "Item canceled!    ",
+            title: "Item canceled",
             position: "topR",
         })
     }
