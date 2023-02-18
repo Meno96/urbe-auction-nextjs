@@ -49,6 +49,16 @@ export default function Header(props) {
 
                     {isWeb3Enabled && account && deployer ? (
                         account.toLowerCase() === deployer.toLowerCase() ? (
+                            <Link href="/add-nft">
+                                <a className="mr-4 p-6 dark:hover:text-gray-100 hover:text-slate-500">
+                                    Add NFT
+                                </a>
+                            </Link>
+                        ) : null
+                    ) : null}
+
+                    {isWeb3Enabled && account && deployer ? (
+                        account.toLowerCase() === deployer.toLowerCase() ? (
                             <Link href="/mint-nft">
                                 <a className="mr-4 p-6 dark:hover:text-gray-100 hover:text-slate-500">
                                     Mint NFT
@@ -56,6 +66,7 @@ export default function Header(props) {
                             </Link>
                         ) : null
                     ) : null}
+
                     {isWeb3Enabled && account && deployer ? (
                         account.toLowerCase() === deployer.toLowerCase() ? (
                             <Link href="/sell-nft">
