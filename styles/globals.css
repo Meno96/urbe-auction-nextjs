@@ -100,6 +100,12 @@
     @apply dark:border-gray-700 !important;
 }
 
+/* Footer */
+/*Dev*/
+.sc-iveFHk.kKQXBH h2 {
+    @apply dark:text-sky-500 !important;
+}
+
 /********** Connect button *************/
 .sc-ilhmMj.lhJPzO {
     @apply transition !important;
@@ -107,7 +113,7 @@
     @apply dark:bg-slate-800 !important;
 }
 /*Dev*/
-.sc-iOeugr.cGUORQ {
+.sc-lbVpMG.iqURqo {
     @apply transition !important;
     @apply duration-700 !important;
     @apply dark:bg-slate-800 !important;

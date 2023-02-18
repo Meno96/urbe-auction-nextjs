@@ -22,7 +22,7 @@ export default function App({ Component, pageProps }) {
             <Head>
                 <title>UrbE Auction</title>
                 <meta name="description" content="UrbE Auction" />
-                <link rel="icon" href="/img.png" />
+                <link rel="icon" href="/next/img.png" />
             </Head>
             <ThemeProvider theme={themeMode}>
                 <GlobalStyles />

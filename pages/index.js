@@ -6,14 +6,29 @@ import networkMapping from "../constants/networkMapping.json"
 import GET_ACTIVE_ITEMS from "@/constants/subgraphQueries"
 import { useQuery } from "@apollo/client"
 import NFTBox from "@/components/NFTBox"
+import { useState, useEffect } from "react"
 
 export default function Home() {
     const { chainId, isWeb3Enabled } = useMoralis()
     const chainString = chainId ? parseInt(chainId).toString() : null
-    // const lastAddress = networkMapping[chainString].UrbEAuction.length
-    const urbEAuctionAddress = chainId ? networkMapping[chainString].UrbEAuction[4] : null
+    const urbEAuctionAddress = chainId ? networkMapping[chainString].UrbEAuction[0] : null
 
-    const { loading, error, data: listedNfts } = useQuery(GET_ACTIVE_ITEMS)
+    const {
+        loading,
+        error,
+        data: listedNfts,
+        startPolling,
+        stopPolling,
+    } = useQuery(GET_ACTIVE_ITEMS, {
+        pollInterval: 1000, // polling ogni 5 secondi
+    })
+
+    useEffect(() => {
+        if (isWeb3Enabled && chainId) {
+            startPolling(1000) // avvia il polling all'avvio della componente
+            return () => stopPolling() // ferma il polling quando la componente viene smontata
+        }
+    }, [isWeb3Enabled, chainId, startPolling, stopPolling])
 
     return (
         <div className="container mx-auto">
@@ -25,6 +40,7 @@ export default function Home() {
                     ) : (
                         listedNfts.activeItems.map((nft) => {
                             const { price, nftAddress, tokenId } = nft
+
                             return urbEAuctionAddress ? (
                                 <NFTBox
                                     price={price}

@@ -6,6 +6,8 @@ import Image from "next/image"
 import { Card, useNotification } from "web3uikit"
 import { ethers } from "ethers"
 import UpdateListingModal from "./UpdateListingModal"
+import Web3 from "web3"
+import { format, intervalToDuration } from "date-fns"
 
 const truncateStr = (fullStr, strLen) => {
     if (fullStr.length <= strLen) return fullStr
@@ -22,11 +24,35 @@ const truncateStr = (fullStr, strLen) => {
     )
 }
 
+const toHHMMSS = (seconds) => {
+    var sec_num = seconds // don't forget the second param
+    var hours = Math.floor(sec_num / 3600)
+    var minutes = Math.floor((sec_num - hours * 3600) / 60)
+    var seconds = sec_num - hours * 3600 - minutes * 60
+
+    if (hours < 10) {
+        hours = "0" + hours
+    }
+    if (minutes < 10) {
+        minutes = "0" + minutes
+    }
+    if (seconds < 10) {
+        seconds = "0" + seconds
+    }
+    return hours + "h " + minutes + "m " + seconds + "s"
+}
+
 export default function NFTBox({ price, nftAddress, tokenId, urbEAuctionAddress }) {
     const { isWeb3Enabled, account } = useMoralis()
     const [imageURI, setImageURI] = useState("")
     const [tokenName, setTokenName] = useState("")
     const [tokenDescription, setTokenDescription] = useState("")
+    const [highestBidder, setHighestBidder] = useState("")
+    const [endTime, setEndTime] = useState("")
+    const [startTime, setStartTime] = useState("")
+    const [timeRemaining, setTimeRemaining] = useState("")
+    const [intervalId, setIntervalId] = useState(null)
+    const [isTimeUp, setIsTimeUp] = useState(false)
     const [showModal, setShowModal] = useState(false)
     const hideModal = () => setShowModal(false)
     const dispatch = useNotification()
@@ -57,9 +83,39 @@ export default function NFTBox({ price, nftAddress, tokenId, urbEAuctionAddress 
         params: {},
     })
 
+    const { runContractFunction: getHighestBidder } = useWeb3Contract({
+        abi: urbEAuctionAbi,
+        contractAddress: urbEAuctionAddress,
+        functionName: "getHighestBidder",
+        params: {
+            nftAddress: nftAddress,
+            tokenId: tokenId,
+        },
+    })
+
+    const { runContractFunction: getListing } = useWeb3Contract({
+        abi: urbEAuctionAbi,
+        contractAddress: urbEAuctionAddress,
+        functionName: "getListing",
+        params: {
+            nftAddress: nftAddress,
+            tokenId: tokenId,
+        },
+    })
+
+    const { runContractFunction: auctionEnd } = useWeb3Contract({
+        abi: urbEAuctionAbi,
+        contractAddress: urbEAuctionAddress,
+        functionName: "auctionEnd",
+        params: {
+            nftAddress: nftAddress,
+            tokenId: tokenId,
+        },
+    })
+
     async function updateUI() {
         const tokenURI = await getTokenURI()
-        console.log(`The TokenURI is ${tokenURI}`)
+        // console.log(`The TokenURI is ${tokenURI}`)
         // We are going to cheat a little here...
         if (tokenURI) {
             // IPFS Gateway: A server that will return IPFS files from a "normal" URL.
@@ -85,13 +141,61 @@ export default function NFTBox({ price, nftAddress, tokenId, urbEAuctionAddress 
         }
     }, [isWeb3Enabled])
 
+    useEffect(() => {
+        if (isWeb3Enabled) {
+            async function initializeCard() {
+                const listedItem = await getListing(nftAddress, tokenId)
+                const endTime = listedItem.endTime
+                const startTime = listedItem.startTime
+                const highestBidder = listedItem.highestBidder
+                setEndTime(endTime)
+                setStartTime(startTime)
+                setHighestBidder(highestBidder)
+
+                setIntervalId(
+                    setInterval(async () => {
+                        const currentTimestamp = Math.floor(Date.now() / 1000) // converti il timestamp corrente in secondi
+                        const timeRemainingInSeconds = endTime - currentTimestamp // calcola il tempo rimanente in secondi
+                        setTimeRemaining(timeRemainingInSeconds) // aggiorna lo stato del tempo rimanente
+
+                        if (timeRemainingInSeconds <= 0) {
+                            // console.log("ok")
+                            setTimeRemaining(0)
+                            clearInterval(intervalId)
+                        }
+                    }, 1000) // aggiorna il timer ogni secondo
+                )
+            }
+
+            initializeCard()
+        }
+    }, [isWeb3Enabled])
+
+    useEffect(() => {
+        if (timeRemaining === 0 && !isTimeUp) {
+            setIsTimeUp(true)
+            callAuctionEnd()
+        }
+    }, [timeRemaining])
+
+    async function callAuctionEnd() {
+        // console.log(highestBidder)
+        await auctionEnd(nftAddress, tokenId)
+    }
+
+    const isHighestBidder =
+        highestBidder.toLowerCase() === account.toLowerCase() || highestBidder === undefined
+    const formattedHighestBidderAddress = isHighestBidder
+        ? "You"
+        : truncateStr(highestBidder || "", 15)
+
     const handleCardClick = async () => {
         const deployer = await getDeployer()
-        console.log(deployer)
+        // console.log(deployer)
 
         const isDeployer =
             deployer.toLowerCase() === account.toLowerCase() || deployer === undefined
-        console.log(isDeployer)
+        // console.log(isDeployer)
         isDeployer
             ? cancelListing({
                   onError: (error) => console.log(error),
@@ -103,7 +207,7 @@ export default function NFTBox({ price, nftAddress, tokenId, urbEAuctionAddress 
     const handleCancelItemSuccess = () => {
         dispatch({
             type: "success",
-            message: "Item canceled!    ",
+            message: "Item canceled!",
             title: "Item canceled",
             position: "topR",
         })
@@ -128,15 +232,33 @@ export default function NFTBox({ price, nftAddress, tokenId, urbEAuctionAddress 
                             onClick={handleCardClick}
                         >
                             <div className="p-2 dark:text-gray-300">
-                                <div className="flex flex-col items-end gap-2">
-                                    <div>#{tokenId}</div>
+                                <div className="flex flex-col gap-2">
+                                    <div className="flex flex-row justify-between">
+                                        <div>#{tokenId}</div>
+                                        {timeRemaining <= 0 ? (
+                                            <div className="italic text-sm">
+                                                The auction has ended
+                                            </div>
+                                        ) : (
+                                            <div className="italic text-sm">
+                                                {toHHMMSS(timeRemaining)}
+                                            </div>
+                                        )}
+                                    </div>
+                                    {price > 0 ? (
+                                        <div className="mb-5 italic text-sm self-end">
+                                            Highest bidder: {formattedHighestBidderAddress}
+                                        </div>
+                                    ) : (
+                                        <div className="mb-5 italic text-sm self-end">No Bid</div>
+                                    )}
                                     <Image
                                         loader={() => imageURI}
                                         src={imageURI}
                                         height="200"
                                         width="200"
                                     />
-                                    <div className="font-bold">
+                                    <div className="mt-5 font-bold self-end">
                                         {ethers.utils.formatUnits(price, "ether")} ETH
                                     </div>
                                 </div>
