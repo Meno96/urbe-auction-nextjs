@@ -252,12 +252,14 @@ export default function NFTBox({ price, nftAddress, tokenId, urbEAuctionAddress 
                                     ) : (
                                         <div className="mb-5 italic text-sm self-end">No Bid</div>
                                     )}
-                                    <Image
-                                        loader={() => imageURI}
-                                        src={imageURI}
-                                        height="200"
-                                        width="200"
-                                    />
+                                    <div className="h-[200px] relative">
+                                        <Image
+                                            loader={() => imageURI}
+                                            src={imageURI}
+                                            layout="fill"
+                                            objectFit="contain"
+                                        />
+                                    </div>
                                     <div className="mt-5 font-bold self-end">
                                         {ethers.utils.formatUnits(price, "ether")} ETH
                                     </div>

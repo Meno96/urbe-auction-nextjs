@@ -59,9 +59,9 @@ export default function Header(props) {
 
                     {isWeb3Enabled && account && deployer ? (
                         account.toLowerCase() === deployer.toLowerCase() ? (
-                            <Link href="/mint-nft">
+                            <Link href="/sell-nft">
                                 <a className="mr-4 p-6 dark:hover:text-gray-100 hover:text-slate-500">
-                                    Mint NFT
+                                    Sell NFT
                                 </a>
                             </Link>
                         ) : null

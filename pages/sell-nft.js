@@ -109,13 +109,6 @@ export default function SellNft() {
                     onSubmit={approveAndList}
                     data={[
                         {
-                            name: "NFT Address",
-                            type: "text",
-                            inputWidth: "50%",
-                            value: "",
-                            key: "nftAddress",
-                        },
-                        {
                             name: "Token ID",
                             type: "number",
                             value: "",
@@ -128,10 +121,10 @@ export default function SellNft() {
                             key: "price",
                         },
                     ]}
-                    title="Sell your NFT!"
-                    id="Main Form"
+                    title="Sell an NFT!"
+                    id="Sell NFT Form"
                 />
-                <div className="mt-5">Withdraw {proceeds} proceeds</div>
+                {/* <div className="mt-5">Withdraw {proceeds} proceeds</div>
                 {proceeds != "0" ? (
                     <Button
                         onClick={() => {
@@ -151,7 +144,7 @@ export default function SellNft() {
                     />
                 ) : (
                     <div>No proceeds detected</div>
-                )}
+                )} */}
             </div>
         </div>
     )

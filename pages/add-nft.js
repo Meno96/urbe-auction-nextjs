@@ -1,158 +1,112 @@
-import Head from "next/head"
-import Image from "next/image"
-import styles from "../styles/Home.module.css"
-import { Form, useNotification, Button } from "web3uikit"
-import { useMoralis, useWeb3Contract } from "react-moralis"
-import { ethers } from "ethers"
-import nftAbi from "../constants/UrbEVehicleNft.json"
-import urbEAuctionAbi from "../constants/UrbEAuction.json"
+import { Form, Upload, Button } from "@web3uikit/core"
+import { useState, useEffect } from "react"
+import axios from "axios"
+import { useWeb3Contract, useMoralis } from "react-moralis"
 import networkMapping from "../constants/networkMapping.json"
-import { useEffect, useState } from "react"
+import nftAbi from "../constants/UrbEVehicleNft.json"
 
-export default function SellNft() {
-    const { chainId, account, isWeb3Enabled } = useMoralis()
-    const chainString = chainId ? parseInt(chainId).toString() : "31337"
-    const urbEAuctionAddress = networkMapping[chainString].UrbEAuction[0]
-    const dispatch = useNotification()
-    const [proceeds, setProceeds] = useState("0")
+export default function AddNft() {
+    const { chainId } = useMoralis()
+    const chainString = chainId ? parseInt(chainId).toString() : null
+    const urbEVehicleNftAddress = chainId ? networkMapping[chainString].UrbEVehicleNft[0] : null
 
-    const { runContractFunction } = useWeb3Contract()
+    const [tokenUri, setTokenUri] = useState("")
 
-    async function approveAndList(data) {
-        console.log("Approving...")
-        const nftAddress = data.data[0].inputResult
-        const tokenId = data.data[1].inputResult
-        const price = ethers.utils.parseUnits(data.data[2].inputResult, "ether").toString()
+    const { runContractFunction: updateArrayUri } = useWeb3Contract({
+        abi: nftAbi,
+        contractAddress: urbEVehicleNftAddress,
+        functionName: "updateArrayUri",
+        params: {
+            _newUri: tokenUri,
+        },
+    })
 
-        const approveOptions = {
-            abi: nftAbi,
-            contractAddress: nftAddress,
-            functionName: "approve",
-            params: {
-                to: urbEAuctionAddress,
-                tokenId: tokenId,
-            },
-        }
+    const { runContractFunction: getvehicleURI } = useWeb3Contract({
+        abi: nftAbi,
+        contractAddress: urbEVehicleNftAddress,
+        functionName: "getvehicleURI",
+        params: {
+            index: 1,
+        },
+    })
 
-        await runContractFunction({
-            params: approveOptions,
-            onSuccess: (tx) => handleApproveSuccess(tx, nftAddress, tokenId, price),
-            onError: (error) => {
-                console.log(error)
-            },
-        })
-    }
+    async function handleSubmit(data) {
+        const name = data.data[0].inputResult
+        const imageFile = data.data[1].inputResult
 
-    async function handleApproveSuccess(tx, nftAddress, tokenId, price) {
-        console.log("Ok! Now time to list")
-        await tx.wait()
-        const listOptions = {
-            abi: urbEAuctionAbi,
-            contractAddress: urbEAuctionAddress,
-            functionName: "listItem",
-            params: {
-                nftAddress: nftAddress,
-                tokenId: tokenId,
-                price: price,
-            },
-        }
+        // console.log(imageFile)
 
-        await runContractFunction({
-            params: listOptions,
-            onSuccess: () => handleListSuccess(),
-            onError: (error) => console.log(error),
-        })
-    }
+        const formData = new FormData()
+        formData.append("name", name)
+        formData.append("image", imageFile)
 
-    async function handleListSuccess() {
-        dispatch({
-            type: "success",
-            message: "NFT listing",
-            title: "NFT listed",
-            position: "topR",
-        })
-    }
-
-    const handleWithdrawSuccess = () => {
-        dispatch({
-            type: "success",
-            message: "Withdrawing proceeds",
-            position: "topR",
-        })
-    }
-
-    async function setupUI() {
-        const returnedProceeds = await runContractFunction({
-            params: {
-                abi: urbEAuctionAbi,
-                contractAddress: urbEAuctionAddress,
-                functionName: "getProceeds",
-                params: {
-                    seller: account,
+        try {
+            const response = await axios.post("/add-nft", formData, {
+                headers: {
+                    "Content-Type": "multipart/form-data",
                 },
-            },
-            onError: (error) => console.log(error),
-        })
-        if (returnedProceeds) {
-            setProceeds(returnedProceeds.toString())
+            })
+
+            const tokenUri = response.data.tokenUri
+            setTokenUri(tokenUri)
+        } catch (error) {
+            console.error(error)
         }
     }
 
     useEffect(() => {
-        setupUI()
-    }, [proceeds, account, isWeb3Enabled, chainId])
+        if (tokenUri) {
+            updateArrayUri()
+        }
+    }, [tokenUri, updateArrayUri])
+
+    async function handleClick() {
+        await updateArrayUri()
+        console.log("ok")
+    }
+
+    async function handleClick2() {
+        const uri = await getvehicleURI()
+        console.log(uri)
+    }
 
     return (
         <div className="flex justify-center">
             <div className="m-5">
                 <Form
-                    onSubmit={approveAndList}
+                    buttonConfig={{
+                        onClick: function noRefCheck() {},
+                        theme: "outline",
+                    }}
+                    onSubmit={handleSubmit}
                     data={[
                         {
-                            name: "NFT Address",
+                            name: "NFT Name",
                             type: "text",
+                            validation: {
+                                required: true,
+                            },
                             inputWidth: "50%",
                             value: "",
-                            key: "nftAddress",
+                            key: "nftName",
                         },
                         {
-                            name: "Token ID",
-                            type: "number",
+                            inputWidth: "100%",
+                            name: "Image",
+                            type: "file",
+                            validation: {
+                                required: true,
+                            },
                             value: "",
-                            key: "tokenId",
-                        },
-                        {
-                            name: "Price (in ETH)",
-                            type: "number",
-                            value: "",
-                            key: "price",
+                            key: "nftImage",
                         },
                     ]}
-                    title="Sell your NFT!"
-                    id="Main Form"
+                    title="Add NFT to URI Array!"
+                    id="Add NFT Form"
                 />
-                <div className="mt-5">Withdraw {proceeds} proceeds</div>
-                {proceeds != "0" ? (
-                    <Button
-                        onClick={() => {
-                            runContractFunction({
-                                params: {
-                                    abi: urbEAuctionAbi,
-                                    contractAddress: urbEAuctionAddress,
-                                    functionName: "withdrawProceeds",
-                                    params: {},
-                                },
-                                onError: (error) => console.log(error),
-                                onSuccess: () => handleWithdrawSuccess,
-                            })
-                        }}
-                        text="Withdraw"
-                        type="button"
-                    />
-                ) : (
-                    <div>No proceeds detected</div>
-                )}
             </div>
+            <Button onClick={handleClick} />
+            <Button onClick={handleClick2} />
         </div>
     )
 }
