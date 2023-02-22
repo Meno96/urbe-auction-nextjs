@@ -11,27 +11,21 @@ export default function AddNft() {
     const urbEVehicleNftAddress = chainId ? networkMapping[chainString].UrbEVehicleNft[0] : null
 
     const [tokenUri, setTokenUri] = useState("")
+    const [nftName, setNftName] = useState("")
 
-    const { runContractFunction: updateArrayUri } = useWeb3Contract({
+    const { runContractFunction: updateMappingNft } = useWeb3Contract({
         abi: nftAbi,
         contractAddress: urbEVehicleNftAddress,
-        functionName: "updateArrayUri",
+        functionName: "updateMappingNft",
         params: {
-            _newUri: tokenUri,
-        },
-    })
-
-    const { runContractFunction: getvehicleURI } = useWeb3Contract({
-        abi: nftAbi,
-        contractAddress: urbEVehicleNftAddress,
-        functionName: "getvehicleURI",
-        params: {
-            index: 1,
+            _uri: tokenUri,
+            _name: nftName,
         },
     })
 
     async function handleSubmit(data) {
         const name = data.data[0].inputResult
+        setNftName(name)
         const imageFile = data.data[1].inputResult
 
         // console.log(imageFile)
@@ -56,19 +50,9 @@ export default function AddNft() {
 
     useEffect(() => {
         if (tokenUri) {
-            updateArrayUri()
+            updateMappingNft()
         }
-    }, [tokenUri, updateArrayUri])
-
-    async function handleClick() {
-        await updateArrayUri()
-        console.log("ok")
-    }
-
-    async function handleClick2() {
-        const uri = await getvehicleURI()
-        console.log(uri)
-    }
+    }, [tokenUri, updateMappingNft])
 
     return (
         <div className="flex justify-center">
@@ -105,8 +89,6 @@ export default function AddNft() {
                     id="Add NFT Form"
                 />
             </div>
-            <Button onClick={handleClick} />
-            <Button onClick={handleClick2} />
         </div>
     )
 }

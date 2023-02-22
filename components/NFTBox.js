@@ -51,6 +51,7 @@ export default function NFTBox({ price, nftAddress, tokenId, urbEAuctionAddress 
     const [endTime, setEndTime] = useState("")
     const [startTime, setStartTime] = useState("")
     const [timeRemaining, setTimeRemaining] = useState("")
+    const [isDeployer, setIsDeployer] = useState(true)
     const [intervalId, setIntervalId] = useState(null)
     const [isTimeUp, setIsTimeUp] = useState(false)
     const [showModal, setShowModal] = useState(false)
@@ -81,16 +82,6 @@ export default function NFTBox({ price, nftAddress, tokenId, urbEAuctionAddress 
         contractAddress: urbEAuctionAddress,
         functionName: "getDeployer",
         params: {},
-    })
-
-    const { runContractFunction: getHighestBidder } = useWeb3Contract({
-        abi: urbEAuctionAbi,
-        contractAddress: urbEAuctionAddress,
-        functionName: "getHighestBidder",
-        params: {
-            nftAddress: nftAddress,
-            tokenId: tokenId,
-        },
     })
 
     const { runContractFunction: getListing } = useWeb3Contract({
@@ -195,6 +186,7 @@ export default function NFTBox({ price, nftAddress, tokenId, urbEAuctionAddress 
 
         const isDeployer =
             deployer.toLowerCase() === account.toLowerCase() || deployer === undefined
+        setIsDeployer(isDeployer)
         // console.log(isDeployer)
         isDeployer
             ? cancelListing({
@@ -245,14 +237,14 @@ export default function NFTBox({ price, nftAddress, tokenId, urbEAuctionAddress 
                                             </div>
                                         )}
                                     </div>
-                                    {price > 0 ? (
+                                    {!isDeployer ? (
                                         <div className="mb-5 italic text-sm self-end">
                                             Highest bidder: {formattedHighestBidderAddress}
                                         </div>
                                     ) : (
                                         <div className="mb-5 italic text-sm self-end">No Bid</div>
                                     )}
-                                    <div className="h-[200px] relative">
+                                    <div className="h-[200px] w-[200px] relative">
                                         <Image
                                             loader={() => imageURI}
                                             src={imageURI}

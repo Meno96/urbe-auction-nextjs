@@ -7,6 +7,7 @@ import GET_ACTIVE_ITEMS from "@/constants/subgraphQueries"
 import { useQuery } from "@apollo/client"
 import NFTBox from "@/components/NFTBox"
 import { useState, useEffect } from "react"
+import { list } from "postcss"
 
 export default function Home() {
     const { chainId, isWeb3Enabled } = useMoralis()

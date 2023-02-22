@@ -11,7 +11,7 @@ const Toggle = ({ theme, toggleTheme }) => {
                 viewBox="0 0 24 24"
                 strokeWidth="1.5"
                 stroke="currentColor"
-                className="w-6 h-6 cursor-pointer dark:hover:text-gray-100 hover:text-slate-500"
+                className="w-6 h-6 w-min-6 h-min-6 cursor-pointer dark:hover:text-gray-100 hover:text-slate-500"
             >
                 <path
                     strokeLinecap="round"
@@ -29,7 +29,7 @@ const Toggle = ({ theme, toggleTheme }) => {
                 viewBox="0 0 24 24"
                 strokeWidth="1.5"
                 stroke="currentColor"
-                className="w-6 h-6 cursor-pointer dark:hover:text-gray-100 hover:text-slate-500"
+                className="w-6 h-6 w-min-6 h-min-6 cursor-pointer dark:hover:text-gray-100 hover:text-slate-500"
             >
                 <path
                     strokeLinecap="round"

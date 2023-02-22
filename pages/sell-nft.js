@@ -1,7 +1,5 @@
-import Head from "next/head"
-import Image from "next/image"
-import styles from "../styles/Home.module.css"
-import { Form, useNotification, Button } from "web3uikit"
+import { Form, Button } from "@web3uikit/core"
+import { useNotification } from "web3uikit"
 import { useMoralis, useWeb3Contract } from "react-moralis"
 import { ethers } from "ethers"
 import nftAbi from "../constants/UrbEVehicleNft.json"
@@ -10,20 +8,49 @@ import networkMapping from "../constants/networkMapping.json"
 import { useEffect, useState } from "react"
 
 export default function SellNft() {
-    const { chainId, account, isWeb3Enabled } = useMoralis()
-    const chainString = chainId ? parseInt(chainId).toString() : "31337"
-    const urbEAuctionAddress = networkMapping[chainString].UrbEAuction[0]
+    const { chainId, isWeb3Enabled, account } = useMoralis()
+    const chainString = chainId ? parseInt(chainId).toString() : null
+    const urbEAuctionAddress = chainId ? networkMapping[chainString].UrbEAuction[0] : null
+    const urbEVehicleNftAddress = chainId ? networkMapping[chainString].UrbEVehicleNft[0] : null
+
+    const [selectNames, setSelectNames] = useState("")
+    const [selectedId, setSelectedId] = useState(null)
+    const [names, setNames] = useState(null)
+
     const dispatch = useNotification()
-    const [proceeds, setProceeds] = useState("0")
 
     const { runContractFunction } = useWeb3Contract()
 
-    async function approveAndList(data) {
-        console.log("Approving...")
-        const nftAddress = data.data[0].inputResult
-        const tokenId = data.data[1].inputResult
-        const price = ethers.utils.parseUnits(data.data[2].inputResult, "ether").toString()
+    async function sellNfts(data) {
+        console.log("Minting...")
+        const nftAddress = urbEVehicleNftAddress
+        const index = selectedId
+        const price = ethers.utils.parseUnits(data.data[1].inputResult, "ether").toString()
+        const biddingTime = (data.data[2].inputResult * 3600).toString()
 
+        const tokenId = await getTokenCounter()
+
+        const approveOptions = {
+            abi: nftAbi,
+            contractAddress: nftAddress,
+            functionName: "mintNft",
+            params: {
+                index: index,
+            },
+        }
+
+        await runContractFunction({
+            params: approveOptions,
+            onSuccess: (tx) => handleMintSuccess(tx, nftAddress, tokenId, price, biddingTime),
+            onError: (error) => {
+                console.log(error)
+            },
+        })
+    }
+
+    async function handleMintSuccess(tx, nftAddress, tokenId, price, biddingTime) {
+        console.log("Approving...")
+        await tx.wait()
         const approveOptions = {
             abi: nftAbi,
             contractAddress: nftAddress,
@@ -36,14 +63,14 @@ export default function SellNft() {
 
         await runContractFunction({
             params: approveOptions,
-            onSuccess: (tx) => handleApproveSuccess(tx, nftAddress, tokenId, price),
+            onSuccess: (tx) => handleApproveSuccess(tx, nftAddress, tokenId, price, biddingTime),
             onError: (error) => {
                 console.log(error)
             },
         })
     }
 
-    async function handleApproveSuccess(tx, nftAddress, tokenId, price) {
+    async function handleApproveSuccess(tx, nftAddress, tokenId, price, biddingTime) {
         console.log("Ok! Now time to list")
         await tx.wait()
         const listOptions = {
@@ -54,6 +81,7 @@ export default function SellNft() {
                 nftAddress: nftAddress,
                 tokenId: tokenId,
                 price: price,
+                biddingTime: biddingTime,
             },
         }
 
@@ -65,6 +93,7 @@ export default function SellNft() {
     }
 
     async function handleListSuccess() {
+        console.log("NFT listed!")
         dispatch({
             type: "success",
             message: "NFT listing",
@@ -73,78 +102,94 @@ export default function SellNft() {
         })
     }
 
-    const handleWithdrawSuccess = () => {
-        dispatch({
-            type: "success",
-            message: "Withdrawing proceeds",
-            position: "topR",
-        })
-    }
+    const { runContractFunction: getNftInfos } = useWeb3Contract({
+        abi: nftAbi,
+        contractAddress: urbEVehicleNftAddress,
+        functionName: "getNftInfos",
+        params: {},
+    })
 
-    async function setupUI() {
-        const returnedProceeds = await runContractFunction({
-            params: {
-                abi: urbEAuctionAbi,
-                contractAddress: urbEAuctionAddress,
-                functionName: "getProceeds",
-                params: {
-                    seller: account,
-                },
-            },
-            onError: (error) => console.log(error),
-        })
-        if (returnedProceeds) {
-            setProceeds(returnedProceeds.toString())
-        }
-    }
+    const { runContractFunction: getTokenCounter } = useWeb3Contract({
+        abi: nftAbi,
+        contractAddress: urbEVehicleNftAddress,
+        functionName: "getTokenCounter",
+        params: {},
+    })
 
     useEffect(() => {
-        setupUI()
-    }, [proceeds, account, isWeb3Enabled, chainId])
+        if (isWeb3Enabled) {
+            async function getNameNfts() {
+                const nfts = await getNftInfos()
+
+                const names = []
+                for (const nft of nfts) {
+                    const name = nft.name
+                    names.push(name)
+                }
+                setNames(names)
+
+                const selectNames = names.map((name, index) => {
+                    return { id: index, label: name }
+                })
+
+                setSelectNames(selectNames)
+            }
+
+            getNameNfts()
+        }
+    }, [isWeb3Enabled])
+
+    function handleNftNameChange(e) {
+        if (e.target.id === "Nft Name_0") {
+            setSelectedId(e.target.value)
+        }
+    }
 
     return (
         <div className="flex justify-center">
             <div className="m-5">
-                <Form
-                    onSubmit={approveAndList}
-                    data={[
-                        {
-                            name: "Token ID",
-                            type: "number",
-                            value: "",
-                            key: "tokenId",
-                        },
-                        {
-                            name: "Price (in ETH)",
-                            type: "number",
-                            value: "",
-                            key: "price",
-                        },
-                    ]}
-                    title="Sell an NFT!"
-                    id="Sell NFT Form"
-                />
-                {/* <div className="mt-5">Withdraw {proceeds} proceeds</div>
-                {proceeds != "0" ? (
-                    <Button
-                        onClick={() => {
-                            runContractFunction({
-                                params: {
-                                    abi: urbEAuctionAbi,
-                                    contractAddress: urbEAuctionAddress,
-                                    functionName: "withdrawProceeds",
-                                    params: {},
-                                },
-                                onError: (error) => console.log(error),
-                                onSuccess: () => handleWithdrawSuccess,
-                            })
+                {isWeb3Enabled && chainId && selectNames ? (
+                    <Form
+                        buttonConfig={{
+                            onClick: function noRefCheck() {},
+                            theme: "outline",
                         }}
-                        text="Withdraw"
-                        type="button"
+                        onSubmit={sellNfts}
+                        data={[
+                            {
+                                name: "Nft Name",
+                                id: "select",
+                                selectOptions: selectNames,
+                                type: "select",
+                                value: "",
+                                validation: {
+                                    required: true,
+                                },
+                            },
+                            {
+                                name: "Price (in ETH)",
+                                id: "ciao",
+                                type: "number",
+                                value: "",
+                                key: "price",
+                            },
+                            {
+                                name: "Auction Time (in hour)",
+                                type: "number",
+                                value: "",
+                                key: "time",
+                                validation: {
+                                    required: true,
+                                },
+                            },
+                        ]}
+                        onChange={handleNftNameChange}
+                        title="Sell an NFT!"
+                        id="Sell NFT Form"
                     />
                 ) : (
-                    <div>No proceeds detected</div>
-                )} */}
+                    <div>Web3 Currently Not Enabled</div>
+                )}
             </div>
         </div>
     )
