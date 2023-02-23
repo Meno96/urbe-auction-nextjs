@@ -168,7 +168,6 @@ export default function SellNft() {
                             },
                             {
                                 name: "Price (in ETH)",
-                                id: "ciao",
                                 type: "number",
                                 value: "",
                                 key: "price",
