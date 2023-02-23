@@ -11,13 +11,16 @@ import urbEAuctionAbi from "../constants/UrbEAuction.json"
 import nftAbi from "../constants/UrbEVehicleNft.json"
 import { useWeb3Contract, useMoralis } from "react-moralis"
 import networkMapping from "../constants/networkMapping.json"
+import { useRouter } from "next/router"
 
 export default function Header(props) {
-    const [deployer, setDeployer] = useState(null)
-
     const { chainId, isWeb3Enabled, account } = useMoralis()
     const chainString = chainId ? parseInt(chainId).toString() : null
     const urbEAuctionAddress = chainId ? networkMapping[chainString].UrbEAuction[0] : null
+    const router = useRouter()
+    const currentPath = router.asPath
+
+    const [deployer, setDeployer] = useState(null)
 
     const { runContractFunction: getDeployer } = useWeb3Contract({
         abi: urbEAuctionAbi,
@@ -36,45 +39,69 @@ export default function Header(props) {
         <nav className="px-5 border-b-[1px] shadow-md">
             <div className="max-w-7xl mx-auto flex flex-row justify-between items-center">
                 <Link href="/">
-                    <a className="flex flex-row items-center dark:hover:text-gray-100 hover:text-slate-500">
+                    <a
+                        className={`mr-4 p-6 hover:scale-125 ${
+                            currentPath === "/"
+                                ? "text-green-600 hover:text-green-600"
+                                : "hover:text-slate-500 dark:hover:text-gray-100"
+                        } `}
+                    >
                         <Image src="next/Logo.png" height="60" width="190" />
                     </a>
                 </Link>
                 <div className="flex flex-row items-center">
                     <Link href="/">
-                        <a className="mr-4 p-6 dark:hover:text-gray-100 hover:text-slate-500">
+                        <a
+                            className={`mr-4 p-6 hover:scale-125 ${
+                                currentPath === "/"
+                                    ? "text-green-600 hover:text-green-600"
+                                    : "hover:text-slate-500 dark:hover:text-gray-100"
+                            } `}
+                        >
                             Home
                         </a>
                     </Link>
 
-                    {isWeb3Enabled && account && deployer ? (
-                        account.toLowerCase() === deployer.toLowerCase() ? (
-                            <Link href="/add-nft">
-                                <a className="mr-4 p-6 dark:hover:text-gray-100 hover:text-slate-500">
-                                    Add NFT
-                                </a>
-                            </Link>
-                        ) : null
+                    {isWeb3Enabled ? (
+                        <Link href="/add-nft">
+                            <a
+                                className={`mr-4 p-6 hover:scale-125 ${
+                                    currentPath === "/add-nft"
+                                        ? "text-green-600 hover:text-green-600"
+                                        : "hover:text-slate-500 dark:hover:text-gray-100"
+                                } `}
+                            >
+                                Add NFT
+                            </a>
+                        </Link>
                     ) : null}
 
-                    {isWeb3Enabled && account && deployer ? (
-                        account.toLowerCase() === deployer.toLowerCase() ? (
-                            <Link href="/sell-nft">
-                                <a className="mr-4 p-6 dark:hover:text-gray-100 hover:text-slate-500">
-                                    Sell NFT
-                                </a>
-                            </Link>
-                        ) : null
+                    {isWeb3Enabled ? (
+                        <Link href="/sell-nft">
+                            <a
+                                className={`mr-4 p-6 hover:scale-125 ${
+                                    currentPath === "/sell-nft"
+                                        ? "text-green-600 hover:text-green-600"
+                                        : "hover:text-slate-500 dark:hover:text-gray-100"
+                                } `}
+                            >
+                                Sell NFT
+                            </a>
+                        </Link>
                     ) : null}
 
-                    {isWeb3Enabled && account && deployer ? (
-                        account.toLowerCase() === deployer.toLowerCase() ? (
-                            <Link href="/sell-nft">
-                                <a className="mr-4 p-6 dark:hover:text-gray-100 hover:text-slate-500">
-                                    Admin
-                                </a>
-                            </Link>
-                        ) : null
+                    {isWeb3Enabled ? (
+                        <Link href="/sell-nft">
+                            <a
+                                className={`mr-4 p-6 hover:scale-125 ${
+                                    currentPath === "/sell-nft"
+                                        ? "text-green-600 hover:text-green-600"
+                                        : "hover:text-slate-500 dark:hover:text-gray-100"
+                                } `}
+                            >
+                                Admin
+                            </a>
+                        </Link>
                     ) : null}
                     <ConnectButton moralisAuth={false} />
                     <Toggle theme={props.theme} toggleTheme={props.themeToggler} />
