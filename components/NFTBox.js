@@ -51,7 +51,7 @@ export default function NFTBox({ price, nftAddress, tokenId, urbEAuctionAddress 
     const [endTime, setEndTime] = useState("")
     const [startTime, setStartTime] = useState("")
     const [timeRemaining, setTimeRemaining] = useState("")
-    const [isDeployer, setIsDeployer] = useState(true)
+    const [deployer, setDeployer] = useState(true)
     const [intervalId, setIntervalId] = useState(null)
     const [isTimeUp, setIsTimeUp] = useState(false)
     const [showModal, setShowModal] = useState(false)
@@ -139,6 +139,8 @@ export default function NFTBox({ price, nftAddress, tokenId, urbEAuctionAddress 
                 const endTime = listedItem.endTime
                 const startTime = listedItem.startTime
                 const highestBidder = listedItem.highestBidder
+                const deployer = await getDeployer()
+                setDeployer(deployer)
                 setEndTime(endTime)
                 setStartTime(startTime)
                 setHighestBidder(highestBidder)
@@ -181,12 +183,8 @@ export default function NFTBox({ price, nftAddress, tokenId, urbEAuctionAddress 
         : truncateStr(highestBidder || "", 15)
 
     const handleCardClick = async () => {
-        const deployer = await getDeployer()
-        // console.log(deployer)
-
         const isDeployer =
             deployer.toLowerCase() === account.toLowerCase() || deployer === undefined
-        setIsDeployer(isDeployer)
         // console.log(isDeployer)
         isDeployer
             ? cancelListing({
@@ -237,7 +235,7 @@ export default function NFTBox({ price, nftAddress, tokenId, urbEAuctionAddress 
                                             </div>
                                         )}
                                     </div>
-                                    {!isDeployer ? (
+                                    {highestBidder != deployer ? (
                                         <div className="mb-5 italic text-sm self-end">
                                             Highest bidder: {formattedHighestBidderAddress}
                                         </div>

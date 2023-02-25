@@ -10,6 +10,7 @@ import { GlobalStyles } from "../components/GlobalStyles"
 import { useDarkMode } from "../components/useDarkMode"
 import { lightTheme, darkTheme } from "../components/Themes"
 import { useRouter } from "next/router"
+import querystring from "querystring"
 
 const client = new ApolloClient({
     cache: new InMemoryCache(),
@@ -20,9 +21,11 @@ export default function App({ Component, pageProps }) {
     const router = useRouter()
     const isSignInPage = router.pathname === "/sign-in"
     const isSignUpPage = router.pathname === "/sign-up"
+    const { username } = querystring.parse(router.asPath.split("?")[1])
 
     const [theme, themeToggler] = useDarkMode()
     const themeMode = theme === "light" ? lightTheme : darkTheme
+
     return (
         <div>
             <Head>
@@ -36,7 +39,11 @@ export default function App({ Component, pageProps }) {
                     <ApolloProvider client={client}>
                         <NotificationProvider>
                             {!isSignInPage && !isSignUpPage ? (
-                                <Header theme={theme} themeToggler={themeToggler} />
+                                <Header
+                                    theme={theme}
+                                    themeToggler={themeToggler}
+                                    username={username}
+                                />
                             ) : (
                                 <div className="absolute top-3 right-3">
                                     <Toggle theme={theme} toggleTheme={themeToggler} />

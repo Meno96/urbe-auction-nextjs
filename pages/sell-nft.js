@@ -25,7 +25,9 @@ export default function SellNft() {
         console.log("Minting...")
         const nftAddress = urbEVehicleNftAddress
         const index = selectedId
-        const price = ethers.utils.parseUnits(data.data[1].inputResult, "ether").toString()
+        const price = data.data[1].inputResult
+            ? ethers.utils.parseUnits(data.data[1].inputResult, "ether").toString()
+            : "0"
         const biddingTime = (data.data[2].inputResult * 3600).toString()
 
         const tokenId = await getTokenCounter()
@@ -169,7 +171,7 @@ export default function SellNft() {
                             {
                                 name: "Price (in ETH)",
                                 type: "number",
-                                value: "",
+                                value: "0",
                                 key: "price",
                             },
                             {
