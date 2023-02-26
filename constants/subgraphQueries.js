@@ -1,6 +1,6 @@
 import { gql } from "@apollo/client"
 
-const GET_ACTIVE_ITEMS = gql`
+export const GET_ACTIVE_ITEMS = gql`
     {
         activeItems(first: 20, where: { winner: "0x0000000000000000000000000000000000000000" }) {
             id
@@ -12,4 +12,15 @@ const GET_ACTIVE_ITEMS = gql`
         }
     }
 `
-export default GET_ACTIVE_ITEMS
+
+export const GET_BUYED_ITEMS = gql`
+    query GetAccountNfts($account: String!, $deployer: String!) {
+        auctionEndeds(where: { winner: $account, winner_not: $deployer }) {
+            id
+            winner
+            nftAddress
+            tokenId
+            price
+        }
+    }
+`

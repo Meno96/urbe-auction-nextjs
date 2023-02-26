@@ -10,7 +10,7 @@ import { GlobalStyles } from "../components/GlobalStyles"
 import { useDarkMode } from "../components/useDarkMode"
 import { lightTheme, darkTheme } from "../components/Themes"
 import { useRouter } from "next/router"
-import querystring from "querystring"
+import { GlobalStateProvider } from "../utils/GlobalStateContext"
 
 const client = new ApolloClient({
     cache: new InMemoryCache(),
@@ -21,39 +21,42 @@ export default function App({ Component, pageProps }) {
     const router = useRouter()
     const isSignInPage = router.pathname === "/sign-in"
     const isSignUpPage = router.pathname === "/sign-up"
-    const { username } = querystring.parse(router.asPath.split("?")[1])
+    const { username } = router.query
 
     const [theme, themeToggler] = useDarkMode()
     const themeMode = theme === "light" ? lightTheme : darkTheme
 
     return (
-        <div>
-            <Head>
-                <title>UrbE Auction</title>
-                <meta name="description" content="UrbE Auction" />
-                <link rel="icon" href="/next/img.png" />
-            </Head>
-            <ThemeProvider theme={themeMode}>
-                <GlobalStyles />
-                <MoralisProvider initializeOnMount={false}>
-                    <ApolloProvider client={client}>
-                        <NotificationProvider>
-                            {!isSignInPage && !isSignUpPage ? (
-                                <Header
-                                    theme={theme}
-                                    themeToggler={themeToggler}
-                                    username={username}
-                                />
-                            ) : (
-                                <div className="absolute top-3 right-3">
-                                    <Toggle theme={theme} toggleTheme={themeToggler} />
-                                </div>
-                            )}
-                            <Component {...pageProps} />
-                        </NotificationProvider>
-                    </ApolloProvider>
-                </MoralisProvider>
-            </ThemeProvider>
-        </div>
+        <GlobalStateProvider>
+            <div>
+                <Head>
+                    <title>UrbE Auction</title>
+                    <meta name="description" content="UrbE Auction" />
+                    <link rel="icon" href="/next/img.png" />
+                </Head>
+                <ThemeProvider theme={themeMode}>
+                    <GlobalStyles />
+                    <MoralisProvider initializeOnMount={false}>
+                        <ApolloProvider client={client}>
+                            <NotificationProvider>
+                                {!isSignInPage && !isSignUpPage ? (
+                                    <Header
+                                        theme={theme}
+                                        themeToggler={themeToggler}
+                                        username={username}
+                                        isStaff={pageProps.isStaff}
+                                    />
+                                ) : (
+                                    <div className="absolute top-3 right-3">
+                                        <Toggle theme={theme} toggleTheme={themeToggler} />
+                                    </div>
+                                )}
+                                <Component {...pageProps} />
+                            </NotificationProvider>
+                        </ApolloProvider>
+                    </MoralisProvider>
+                </ThemeProvider>
+            </div>
+        </GlobalStateProvider>
     )
 }

@@ -1,7 +1,7 @@
 import { useForm } from "react-hook-form"
 import axios from "axios"
 import { useRouter } from "next/router"
-import { useState, useEffect } from "react"
+import { useState } from "react"
 import Cookies from "js-cookie"
 
 export default function SignIn() {

@@ -111,6 +111,12 @@
     @apply shadow-xl !important;
 }
 
+/*Label*/
+/*Dev*/
+.sc-fcCDlF.kDOwvM {
+    @apply bg-slate-800 !important;
+}
+
 /********** Card *************/
 .sc-fnGiBr.dVAuoB {
     @apply transition !important;

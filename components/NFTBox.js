@@ -48,8 +48,10 @@ export default function NFTBox({ price, nftAddress, tokenId, urbEAuctionAddress 
     const [tokenName, setTokenName] = useState("")
     const [tokenDescription, setTokenDescription] = useState("")
     const [highestBidder, setHighestBidder] = useState("")
+    const [seller, setSeller] = useState("")
     const [endTime, setEndTime] = useState("")
     const [startTime, setStartTime] = useState("")
+    const [isFlipped, setIsFlipped] = useState(false)
     const [timeRemaining, setTimeRemaining] = useState("")
     const [deployer, setDeployer] = useState(true)
     const [intervalId, setIntervalId] = useState(null)
@@ -139,11 +141,13 @@ export default function NFTBox({ price, nftAddress, tokenId, urbEAuctionAddress 
                 const endTime = listedItem.endTime
                 const startTime = listedItem.startTime
                 const highestBidder = listedItem.highestBidder
+                const seller = listedItem.seller
                 const deployer = await getDeployer()
                 setDeployer(deployer)
                 setEndTime(endTime)
                 setStartTime(startTime)
                 setHighestBidder(highestBidder)
+                setSeller(seller)
 
                 setIntervalId(
                     setInterval(async () => {
@@ -183,10 +187,13 @@ export default function NFTBox({ price, nftAddress, tokenId, urbEAuctionAddress 
         : truncateStr(highestBidder || "", 15)
 
     const handleCardClick = async () => {
-        const isDeployer =
-            deployer.toLowerCase() === account.toLowerCase() || deployer === undefined
-        // console.log(isDeployer)
-        isDeployer
+        setIsFlipped(!isFlipped)
+    }
+
+    const handleButtonClick = async () => {
+        const isSeller = seller.toLowerCase() === account.toLowerCase() || seller === undefined
+
+        isSeller
             ? cancelListing({
                   onError: (error) => console.log(error),
                   onSuccess: () => handleCancelItemSuccess(),
@@ -215,47 +222,73 @@ export default function NFTBox({ price, nftAddress, tokenId, urbEAuctionAddress 
                             nftAddress={nftAddress}
                             onClose={hideModal}
                         />
-
-                        <Card
-                            title={tokenName}
-                            description={tokenDescription}
-                            onClick={handleCardClick}
-                        >
-                            <div className="p-2 dark:text-gray-300">
-                                <div className="flex flex-col gap-2">
-                                    <div className="flex flex-row justify-between">
-                                        <div>#{tokenId}</div>
-                                        {timeRemaining <= 0 ? (
-                                            <div className="italic text-sm">
-                                                The auction has ended
+                        <div className="group [perspective:400px]">
+                            <div
+                                onClick={handleCardClick}
+                                className={`relative h-[410px] !w-[245px] cursor-pointer rounded-3xl sc-iveFHk kKQXBH transition-all duration-500 [transform-style:preserve-3d]  ${
+                                    isFlipped ? "[transform:rotateY(180deg)]" : ""
+                                }  `}
+                            >
+                                <div className="absolute h-full w-full p-5 dark:text-gray-300 [backface-visibility:hidden]">
+                                    <div className="flex flex-col gap-2">
+                                        <div className="flex flex-row justify-between">
+                                            <div>#{tokenId}</div>
+                                            {timeRemaining <= 0 ? (
+                                                <div className="italic text-sm">
+                                                    The auction has ended
+                                                </div>
+                                            ) : (
+                                                <div className="italic text-sm">
+                                                    {toHHMMSS(timeRemaining)}
+                                                </div>
+                                            )}
+                                        </div>
+                                        {highestBidder.toLowerCase() != seller.toLowerCase() ? (
+                                            <div className="mb-5 italic text-sm self-end">
+                                                Highest bidder: {formattedHighestBidderAddress}
                                             </div>
                                         ) : (
-                                            <div className="italic text-sm">
-                                                {toHHMMSS(timeRemaining)}
+                                            <div className="mb-5 italic text-sm self-end">
+                                                No Bid
                                             </div>
                                         )}
-                                    </div>
-                                    {highestBidder != deployer ? (
-                                        <div className="mb-5 italic text-sm self-end">
-                                            Highest bidder: {formattedHighestBidderAddress}
+                                        <div className="h-[200px] w-[200px] relative">
+                                            <Image
+                                                loader={() => imageURI}
+                                                src={imageURI}
+                                                layout="fill"
+                                                objectFit="contain"
+                                            />
                                         </div>
-                                    ) : (
-                                        <div className="mb-5 italic text-sm self-end">No Bid</div>
-                                    )}
-                                    <div className="h-[200px] w-[200px] relative">
-                                        <Image
-                                            loader={() => imageURI}
-                                            src={imageURI}
-                                            layout="fill"
-                                            objectFit="contain"
-                                        />
+                                        <div className="mt-5 font-bold self-end">
+                                            {ethers.utils.formatUnits(price, "ether")} ETH
+                                        </div>
                                     </div>
-                                    <div className="mt-5 font-bold self-end">
-                                        {ethers.utils.formatUnits(price, "ether")} ETH
+                                    <div className="flex justify-center mt-3 font-semibold text-lg">
+                                        <h2>{tokenName}</h2>
+                                    </div>
+                                </div>
+                                <div className="absolute h-full w-full p-5 flex justify-center transition duration-500 dark:text-gray-300 [transform:rotateY(180deg)] [backface-visibility:hidden]">
+                                    <div className="flex  items-center">
+                                        {account.toLowerCase() === seller.toLowerCase() ? (
+                                            <button
+                                                onClick={handleButtonClick}
+                                                className="btn btn-outline-primary px-3 py-1 rounded-xl border-2 font-semibold text-[14px] hover:scale-125 transition ease-out duration-500 border-green-600 dark:bg-green-600 text-slate-800"
+                                            >
+                                                Cancel Listing
+                                            </button>
+                                        ) : (
+                                            <button
+                                                onClick={handleButtonClick}
+                                                className="btn btn-outline-primary px-3 py-1 rounded-xl border-2 font-semibold text-[14px] hover:scale-125 transition ease-out duration-500 border-green-600 dark:bg-green-600 text-slate-800"
+                                            >
+                                                Place a Bid!
+                                            </button>
+                                        )}
                                     </div>
                                 </div>
                             </div>
-                        </Card>
+                        </div>
                     </div>
                 ) : (
                     <div>Loading...</div>
