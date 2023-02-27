@@ -28,11 +28,11 @@ export default function SellNft() {
         const price = data.data[1].inputResult
             ? ethers.utils.parseUnits(data.data[1].inputResult, "ether").toString()
             : "0"
-        const biddingTime = (data.data[2].inputResult * 3600).toString()
+        const biddingTime = (data.data[2].inputResult).toString()
 
         const tokenId = await getTokenCounter()
 
-        const approveOptions = {
+        const mintOptions = {
             abi: nftAbi,
             contractAddress: nftAddress,
             functionName: "mintNft",
@@ -42,7 +42,7 @@ export default function SellNft() {
         }
 
         await runContractFunction({
-            params: approveOptions,
+            params: mintOptions,
             onSuccess: (tx) => handleMintSuccess(tx, nftAddress, tokenId, price, biddingTime),
             onError: (error) => {
                 console.log(error)

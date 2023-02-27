@@ -47,7 +47,7 @@ export default function Header(props) {
                 <div className="max-w-7xl mx-auto flex flex-row items-center justify-between">
                     <div className="flex-1">
                         <Link href={"/"}>
-                            <div className="p-1 w-[190px] h-[60px] hover:scale-125 flex items-center">
+                            <div className="p-1 w-[190px] h-[60px] cursor-pointer hover:scale-125 flex items-center">
                                 <Image src="next/Logo.png" height="60" width="190" />
                             </div>
                         </Link>

@@ -8,6 +8,8 @@ import { ethers } from "ethers"
 import UpdateListingModal from "./UpdateListingModal"
 import Web3 from "web3"
 import { format, intervalToDuration } from "date-fns"
+import axios from "axios"
+import Cookies from "js-cookie"
 
 const truncateStr = (fullStr, strLen) => {
     if (fullStr.length <= strLen) return fullStr
@@ -59,6 +61,7 @@ export default function NFTBox({ price, nftAddress, tokenId, urbEAuctionAddress 
     const [showModal, setShowModal] = useState(false)
     const hideModal = () => setShowModal(false)
     const dispatch = useNotification()
+    const csrfToken = Cookies.get("csrftoken")
 
     const { runContractFunction: getTokenURI } = useWeb3Contract({
         abi: nftAbi,
@@ -108,10 +111,7 @@ export default function NFTBox({ price, nftAddress, tokenId, urbEAuctionAddress 
 
     async function updateUI() {
         const tokenURI = await getTokenURI()
-        // console.log(`The TokenURI is ${tokenURI}`)
-        // We are going to cheat a little here...
         if (tokenURI) {
-            // IPFS Gateway: A server that will return IPFS files from a "normal" URL.
             const requestURL = tokenURI.replace("ipfs://", "https://ipfs.io/ipfs/")
             const tokenURIResponse = await (await fetch(requestURL)).json()
             const imageURI = tokenURIResponse.image
@@ -119,13 +119,7 @@ export default function NFTBox({ price, nftAddress, tokenId, urbEAuctionAddress 
             setImageURI(imageURIURL)
             setTokenName(tokenURIResponse.name)
             setTokenDescription(tokenURIResponse.description)
-            // We could render the Image on our sever, and just call our sever.
-            // For testnets & mainnet -> use moralis server hooks
-            // Have the world adopt IPFS
-            // Build our own IPFS gateway
         }
-        // get the tokenURI
-        // using the image tag from the tokenURI, get the image
     }
 
     useEffect(() => {
@@ -139,34 +133,32 @@ export default function NFTBox({ price, nftAddress, tokenId, urbEAuctionAddress 
             async function initializeCard() {
                 const listedItem = await getListing(nftAddress, tokenId)
                 const endTime = listedItem.endTime
-                const startTime = listedItem.startTime
                 const highestBidder = listedItem.highestBidder
                 const seller = listedItem.seller
                 const deployer = await getDeployer()
                 setDeployer(deployer)
-                setEndTime(endTime)
-                setStartTime(startTime)
                 setHighestBidder(highestBidder)
                 setSeller(seller)
 
-                setIntervalId(
-                    setInterval(async () => {
-                        const currentTimestamp = Math.floor(Date.now() / 1000) // converti il timestamp corrente in secondi
-                        const timeRemainingInSeconds = endTime - currentTimestamp // calcola il tempo rimanente in secondi
-                        setTimeRemaining(timeRemainingInSeconds) // aggiorna lo stato del tempo rimanente
+                if (endTime != 0) {
+                    setIntervalId(
+                        setInterval(async () => {
+                            const currentTimestamp = Math.floor(Date.now() / 1000) // converti il timestamp corrente in secondi
+                            const timeRemainingInSeconds = endTime - currentTimestamp // calcola il tempo rimanente in secondi
+                            setTimeRemaining(timeRemainingInSeconds) // aggiorna lo stato del tempo rimanente
 
-                        if (timeRemainingInSeconds <= 0) {
-                            // console.log("ok")
-                            setTimeRemaining(0)
-                            clearInterval(intervalId)
-                        }
-                    }, 1000) // aggiorna il timer ogni secondo
-                )
+                            if (timeRemainingInSeconds <= 0) {
+                                setTimeRemaining(0)
+                                clearInterval(intervalId)
+                            }
+                        }, 1000) // aggiorna il timer ogni secondo
+                    )
+                }
             }
 
             initializeCard()
         }
-    }, [isWeb3Enabled])
+    }, [isWeb3Enabled, endTime])
 
     useEffect(() => {
         if (timeRemaining === 0 && !isTimeUp) {
@@ -176,8 +168,25 @@ export default function NFTBox({ price, nftAddress, tokenId, urbEAuctionAddress 
     }, [timeRemaining])
 
     async function callAuctionEnd() {
-        // console.log(highestBidder)
         await auctionEnd(nftAddress, tokenId)
+
+        const listedItem = await getListing(nftAddress, tokenId)
+
+        const formData = new FormData()
+        formData.append("nftId", tokenId)
+        formData.append("winner", listedItem.highestBidder)
+        formData.append("price", listedItem.price)
+
+        try {
+            const response = await axios.post("/end-auction", formData, {
+                headers: {
+                    "Content-Type": "multipart/form-data",
+                    "X-CSRFToken": csrfToken,
+                },
+            })
+        } catch (error) {
+            console.error(error)
+        }
     }
 
     const isHighestBidder =
@@ -221,6 +230,8 @@ export default function NFTBox({ price, nftAddress, tokenId, urbEAuctionAddress 
                             urbEAuctionAddress={urbEAuctionAddress}
                             nftAddress={nftAddress}
                             onClose={hideModal}
+                            nftId={tokenId}
+                            seller={seller}
                         />
                         <div className="group [perspective:400px]">
                             <div
