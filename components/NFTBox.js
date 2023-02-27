@@ -184,6 +184,8 @@ export default function NFTBox({ price, nftAddress, tokenId, urbEAuctionAddress 
                     "X-CSRFToken": csrfToken,
                 },
             })
+
+            const auctionJson = response.data.auctionJson
         } catch (error) {
             console.error(error)
         }
@@ -289,12 +291,14 @@ export default function NFTBox({ price, nftAddress, tokenId, urbEAuctionAddress 
                                                 Cancel Listing
                                             </button>
                                         ) : (
-                                            <button
-                                                onClick={handleButtonClick}
-                                                className="btn btn-outline-primary px-3 py-1 rounded-xl border-2 font-semibold text-[14px] hover:scale-125 transition ease-out duration-500 border-green-600 dark:bg-green-600 text-slate-800"
-                                            >
-                                                Place a Bid!
-                                            </button>
+                                            timeRemaining > 0 && (
+                                                <button
+                                                    onClick={handleButtonClick}
+                                                    className="btn btn-outline-primary px-3 py-1 rounded-xl border-2 font-semibold text-[14px] hover:scale-125 transition ease-out duration-500 border-green-600 dark:bg-green-600 text-slate-800"
+                                                >
+                                                    Place a Bid!
+                                                </button>
+                                            )
                                         )}
                                     </div>
                                 </div>

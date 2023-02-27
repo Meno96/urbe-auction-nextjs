@@ -6,14 +6,16 @@ import networkMapping from "../constants/networkMapping.json"
 import { GET_ACTIVE_ITEMS } from "@/constants/subgraphQueries"
 import { useQuery } from "@apollo/client"
 import NFTBox from "@/components/NFTBox"
-import { useState, useEffect } from "react"
+import { useState, useEffect, useContext } from "react"
 import { list } from "postcss"
+import axios from "axios"
+import { GlobalStateContext } from "../utils/GlobalStateContext"
 
-export default function Home() {
+export default function Home(props) {
     const { chainId, isWeb3Enabled } = useMoralis()
     const chainString = chainId ? parseInt(chainId).toString() : null
     const urbEAuctionAddress = chainId ? networkMapping[chainString].UrbEAuction[0] : null
-
+    
     const {
         loading,
         error,

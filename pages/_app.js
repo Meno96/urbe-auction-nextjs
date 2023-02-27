@@ -1,6 +1,5 @@
 import "@/styles/globals.css"
 import { MoralisProvider } from "react-moralis"
-import Header from "@/components/Header"
 import Toggle from "@/components/Toggler"
 import Head from "next/head"
 import { NotificationProvider } from "web3uikit"
@@ -11,6 +10,7 @@ import { useDarkMode } from "../components/useDarkMode"
 import { lightTheme, darkTheme } from "../components/Themes"
 import { useRouter } from "next/router"
 import { GlobalStateProvider } from "../utils/GlobalStateContext"
+import FetchUserInfo from "@/utils/FetchUserInfo"
 
 const client = new ApolloClient({
     cache: new InMemoryCache(),
@@ -40,12 +40,7 @@ export default function App({ Component, pageProps }) {
                         <ApolloProvider client={client}>
                             <NotificationProvider>
                                 {!isSignInPage && !isSignUpPage ? (
-                                    <Header
-                                        theme={theme}
-                                        themeToggler={themeToggler}
-                                        username={username}
-                                        isStaff={pageProps.isStaff}
-                                    />
+                                    <FetchUserInfo theme={theme} themeToggler={themeToggler} />
                                 ) : (
                                     <div className="absolute top-3 right-3">
                                         <Toggle theme={theme} toggleTheme={themeToggler} />

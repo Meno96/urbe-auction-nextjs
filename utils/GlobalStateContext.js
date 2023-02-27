@@ -6,7 +6,7 @@ export const GlobalStateContext = createContext()
 export const GlobalStateProvider = ({ children }) => {
     const [globalState, setGlobalState] = useState({
         isStaff: false,
-        username: "",
+        username: null,
     })
 
     return (

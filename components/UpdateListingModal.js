@@ -22,7 +22,7 @@ export default function UpdateListingModal({
 
     const [priceToUpdateListingWith, setPriceToUpdateListingWith] = useState(0)
 
-    async function handleUpdateListingSuccess(tx) {
+    async function handleUpdateListingSuccess() {
         try {
             const receipt = await tx.wait()
             if (receipt.status === 1) {
