@@ -18,6 +18,20 @@ export const GET_BUYED_ITEMS = gql`
         auctionEndeds(where: { winner: $account, winner_not: $deployer }) {
             id
             winner
+            seller
+            nftAddress
+            tokenId
+            price
+        }
+    }
+`
+
+export const GET_SOLD_ITEMS = gql`
+    query GetAccountNfts($seller: String!) {
+        auctionEndeds(where: { seller: $seller }) {
+            id
+            winner
+            seller
             nftAddress
             tokenId
             price

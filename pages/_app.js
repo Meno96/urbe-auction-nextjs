@@ -21,7 +21,6 @@ export default function App({ Component, pageProps }) {
     const router = useRouter()
     const isSignInPage = router.pathname === "/sign-in"
     const isSignUpPage = router.pathname === "/sign-up"
-    const { username } = router.query
 
     const [theme, themeToggler] = useDarkMode()
     const themeMode = theme === "light" ? lightTheme : darkTheme

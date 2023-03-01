@@ -11,11 +11,12 @@ import { list } from "postcss"
 import axios from "axios"
 import { GlobalStateContext } from "../utils/GlobalStateContext"
 
-export default function Home(props) {
+export default function Home() {
     const { chainId, isWeb3Enabled } = useMoralis()
     const chainString = chainId ? parseInt(chainId).toString() : null
     const urbEAuctionAddress = chainId ? networkMapping[chainString].UrbEAuction[0] : null
-    
+    const { globalState, setGlobalState } = useContext(GlobalStateContext)
+
     const {
         loading,
         error,
@@ -35,6 +36,14 @@ export default function Home(props) {
 
     return (
         <div className="container mx-auto">
+            {globalState.checkIp && (
+                <div className="flex justify-center">
+                    <p className="p-5 text-red-600 font-semibold">
+                        Your actual ip address is different from the last login. We suggest you to
+                        change password.
+                    </p>
+                </div>
+            )}
             <h1 className="p-4 font-bold text-2xl">Recently Listed</h1>
             <div className="flex flex-wrap">
                 {isWeb3Enabled && chainId ? (

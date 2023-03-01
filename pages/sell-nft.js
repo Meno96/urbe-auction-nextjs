@@ -28,7 +28,7 @@ export default function SellNft() {
         const price = data.data[1].inputResult
             ? ethers.utils.parseUnits(data.data[1].inputResult, "ether").toString()
             : "0"
-        const biddingTime = (data.data[2].inputResult * 3600).toString()
+        const biddingTime = data.data[2].inputResult.toString()
 
         const tokenId = await getTokenCounter()
 
@@ -52,56 +52,96 @@ export default function SellNft() {
 
     async function handleMintSuccess(tx, nftAddress, tokenId, price, biddingTime) {
         console.log("Approving...")
-        await tx.wait()
-        const approveOptions = {
-            abi: nftAbi,
-            contractAddress: nftAddress,
-            functionName: "approve",
-            params: {
-                to: urbEAuctionAddress,
-                tokenId: tokenId,
-            },
-        }
+        const receipt = await tx.wait()
+        if (receipt.status === 1) {
+            dispatch({
+                type: "success",
+                title: "Minted!",
+                position: "topR",
+            })
+            const approveOptions = {
+                abi: nftAbi,
+                contractAddress: nftAddress,
+                functionName: "approve",
+                params: {
+                    to: urbEAuctionAddress,
+                    tokenId: tokenId,
+                },
+            }
 
-        await runContractFunction({
-            params: approveOptions,
-            onSuccess: (tx) => handleApproveSuccess(tx, nftAddress, tokenId, price, biddingTime),
-            onError: (error) => {
-                console.log(error)
-            },
-        })
+            await runContractFunction({
+                params: approveOptions,
+                onSuccess: (tx) =>
+                    handleApproveSuccess(tx, nftAddress, tokenId, price, biddingTime),
+                onError: (error) => {
+                    console.log(error)
+                },
+            })
+        } else {
+            console.error("Transaction failed")
+            dispatch({
+                type: "error",
+                title: "Mint failed",
+                position: "topR",
+            })
+        }
     }
 
     async function handleApproveSuccess(tx, nftAddress, tokenId, price, biddingTime) {
         console.log("Ok! Now time to list")
-        await tx.wait()
-        const listOptions = {
-            abi: urbEAuctionAbi,
-            contractAddress: urbEAuctionAddress,
-            functionName: "listItem",
-            params: {
-                nftAddress: nftAddress,
-                tokenId: tokenId,
-                price: price,
-                biddingTime: biddingTime,
-            },
-        }
+        const receipt = await tx.wait()
+        if (receipt.status === 1) {
+            dispatch({
+                type: "success",
+                title: "Approved!",
+                position: "topR",
+            })
+            const listOptions = {
+                abi: urbEAuctionAbi,
+                contractAddress: urbEAuctionAddress,
+                functionName: "listItem",
+                params: {
+                    nftAddress: nftAddress,
+                    tokenId: tokenId,
+                    price: price,
+                    biddingTime: biddingTime,
+                },
+            }
 
-        await runContractFunction({
-            params: listOptions,
-            onSuccess: () => handleListSuccess(),
-            onError: (error) => console.log(error),
-        })
+            await runContractFunction({
+                params: listOptions,
+                onSuccess: (tx) => handleListSuccess(tx),
+                onError: (error) => {
+                    console.log(error)
+                },
+            })
+        } else {
+            console.error("Transaction failed")
+            dispatch({
+                type: "error",
+                title: "Approve failed",
+                position: "topR",
+            })
+        }
     }
 
-    async function handleListSuccess() {
+    async function handleListSuccess(tx) {
         console.log("NFT listed!")
-        dispatch({
-            type: "success",
-            message: "NFT listing",
-            title: "NFT listed",
-            position: "topR",
-        })
+        const receipt = await tx.wait()
+        if (receipt.status === 1) {
+            dispatch({
+                type: "success",
+                title: "NFT listed!",
+                position: "topR",
+            })
+        } else {
+            console.error("Transaction failed")
+            dispatch({
+                type: "error",
+                title: "List failed",
+                position: "topR",
+            })
+        }
     }
 
     const { runContractFunction: getNftInfos } = useWeb3Contract({

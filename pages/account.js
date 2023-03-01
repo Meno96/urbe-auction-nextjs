@@ -1,13 +1,14 @@
 import { Button, Notification } from "@web3uikit/core"
 import { useNotification } from "web3uikit"
-import { GET_BUYED_ITEMS } from "@/constants/subgraphQueries"
+import { GET_BUYED_ITEMS, GET_SOLD_ITEMS } from "@/constants/subgraphQueries"
 import { useQuery } from "@apollo/client"
 import { useWeb3Contract, useMoralis } from "react-moralis"
 import networkMapping from "../constants/networkMapping.json"
-import { useEffect, useState } from "react"
+import { useEffect, useState, useContext } from "react"
 import OwnedNFTBox from "@/components/OwnedNFTBox"
 import urbEAuctionAbi from "../constants/UrbEAuction.json"
 import { ethers } from "ethers"
+import { GlobalStateContext } from "../utils/GlobalStateContext"
 
 export default function Account() {
     const { chainId, isWeb3Enabled, account } = useMoralis()
@@ -15,6 +16,7 @@ export default function Account() {
     const urbEAuctionAddress = chainId ? networkMapping[chainString].UrbEAuction[0] : null
     const { runContractFunction } = useWeb3Contract()
     const dispatch = useNotification()
+    const { globalState, setGlobalState } = useContext(GlobalStateContext)
 
     const [deployer, setDeployer] = useState(null)
     const [proceeds, setProceeds] = useState("0")
@@ -56,6 +58,15 @@ export default function Account() {
         variables: { account: account, deployer: deployer },
     })
 
+    const {
+        loading: loadingSold,
+        error: errorSold,
+        data: soldNfts,
+    } = useQuery(GET_SOLD_ITEMS, {
+        pollInterval: 5000,
+        variables: { seller: account },
+    })
+
     async function setupUI() {
         const returnedProceeds = await getProceeds()
         if (returnedProceeds) {
@@ -76,16 +87,50 @@ export default function Account() {
     }, [proceeds, account, isWeb3Enabled, chainId])
 
     return (
-        <div className="container mx-auto flex flex-col">
-            <div className="border-4 border-solid border-green-600 rounded-2xl p-4 m-5">
-                <h1 className="mb-5  font-bold text-2xl">Owned NFTs</h1>
-                <div className="flex flex-wrap">
-                    {isWeb3Enabled && chainId && ownedNfts ? (
+        // <div className="max-w-[1536px] min-w-[880px] w-auto mx-auto flex flex-col">
+        <div className="flex flex-col items-center">
+            <div className="border-4 border-solid border-green-600 rounded-2xl p-4 m-5 max-w-[1536px] flex flex-col">
+                {globalState.isStaff ? (
+                    <h1 className="mb-5 font-bold text-2xl">Sold NFTs</h1>
+                ) : (
+                    <h1 className="mb-5 font-bold text-2xl">Owned NFTs</h1>
+                )}
+                <div className="flex flex-row flex-wrap justify-center">
+                    {globalState.isStaff ? (
+                        isWeb3Enabled && chainId && soldNfts ? (
+                            loadingSold ? (
+                                <div>Loading...</div>
+                            ) : soldNfts.auctionEndeds.length ? (
+                                soldNfts.auctionEndeds.map((nft) => {
+                                    const { price, nftAddress, tokenId, winner } = nft
+
+                                    return urbEAuctionAddress ? (
+                                        <OwnedNFTBox
+                                            price={price}
+                                            nftAddress={nftAddress}
+                                            tokenId={tokenId}
+                                            urbEAuctionAddress={urbEAuctionAddress}
+                                            sellerWinner={winner}
+                                            key={`${nftAddress}${tokenId}`}
+                                        />
+                                    ) : (
+                                        <div>
+                                            Network error, please switch to a supported network.
+                                        </div>
+                                    )
+                                })
+                            ) : (
+                                <div>No NFTs sold</div>
+                            )
+                        ) : (
+                            <div>Web3 Currently Not Enabled</div>
+                        )
+                    ) : isWeb3Enabled && chainId && ownedNfts ? (
                         loading ? (
                             <div>Loading...</div>
                         ) : ownedNfts.auctionEndeds.length ? (
                             ownedNfts.auctionEndeds.map((nft) => {
-                                const { price, nftAddress, tokenId } = nft
+                                const { price, nftAddress, tokenId, seller } = nft
 
                                 return urbEAuctionAddress ? (
                                     <OwnedNFTBox
@@ -93,6 +138,7 @@ export default function Account() {
                                         nftAddress={nftAddress}
                                         tokenId={tokenId}
                                         urbEAuctionAddress={urbEAuctionAddress}
+                                        sellerWinner={seller}
                                         key={`${nftAddress}${tokenId}`}
                                     />
                                 ) : (

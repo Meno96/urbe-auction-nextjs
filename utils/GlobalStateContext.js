@@ -7,6 +7,7 @@ export const GlobalStateProvider = ({ children }) => {
     const [globalState, setGlobalState] = useState({
         isStaff: false,
         username: null,
+        checkIp: null,
     })
 
     return (

@@ -13,16 +13,21 @@ export default function FetchUserInfo(props) {
                 const userInfo = response.data
                 const isStaff = userInfo.isStaff
                 const username = userInfo.username
+                const checkIp = userInfo.checkIp
 
-                console.log(username)
-
-                setGlobalState({ ...globalState, isStaff: isStaff, username: username })
+                setGlobalState({
+                    ...globalState,
+                    isStaff: isStaff,
+                    username: username,
+                    checkIp: checkIp,
+                })
             } catch (error) {
                 console.error("Failed to fetch user info:", error)
                 setGlobalState({
                     ...globalState,
                     isStaff: false,
                     username: null,
+                    checkIp: null,
                 })
             }
         }

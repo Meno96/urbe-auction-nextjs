@@ -57,11 +57,14 @@ export default function NFTBox({ price, nftAddress, tokenId, urbEAuctionAddress 
     const [timeRemaining, setTimeRemaining] = useState("")
     const [deployer, setDeployer] = useState(true)
     const [intervalId, setIntervalId] = useState(null)
+    const [data, setData] = useState(null)
     const [isTimeUp, setIsTimeUp] = useState(false)
     const [showModal, setShowModal] = useState(false)
     const hideModal = () => setShowModal(false)
     const dispatch = useNotification()
     const csrfToken = Cookies.get("csrftoken")
+
+    const { runContractFunction } = useWeb3Contract()
 
     const { runContractFunction: getTokenURI } = useWeb3Contract({
         abi: nftAbi,
@@ -93,16 +96,6 @@ export default function NFTBox({ price, nftAddress, tokenId, urbEAuctionAddress 
         abi: urbEAuctionAbi,
         contractAddress: urbEAuctionAddress,
         functionName: "getListing",
-        params: {
-            nftAddress: nftAddress,
-            tokenId: tokenId,
-        },
-    })
-
-    const { runContractFunction: auctionEnd } = useWeb3Contract({
-        abi: urbEAuctionAbi,
-        contractAddress: urbEAuctionAddress,
-        functionName: "auctionEnd",
         params: {
             nftAddress: nftAddress,
             tokenId: tokenId,
@@ -168,26 +161,78 @@ export default function NFTBox({ price, nftAddress, tokenId, urbEAuctionAddress 
     }, [timeRemaining])
 
     async function callAuctionEnd() {
-        await auctionEnd(nftAddress, tokenId)
-
-        const listedItem = await getListing(nftAddress, tokenId)
-
-        const formData = new FormData()
-        formData.append("nftId", tokenId)
-        formData.append("winner", listedItem.highestBidder)
-        formData.append("price", listedItem.price)
-
         try {
-            const response = await axios.post("/end-auction", formData, {
-                headers: {
-                    "Content-Type": "multipart/form-data",
-                    "X-CSRFToken": csrfToken,
-                },
+            const listedItem = await getListing(nftAddress, tokenId)
+            const priceETH = ethers.utils.formatEther(listedItem.price)
+
+            const auctionData = {
+                nftId: tokenId,
+                winner: listedItem.highestBidder,
+                priceETH: priceETH.toString(),
+            }
+
+            const auctionJson = JSON.stringify(auctionData)
+            const auctionBytes = new TextEncoder().encode(auctionJson)
+
+            const auctionHexString = []
+            auctionBytes.forEach((byte) => {
+                auctionHexString.push(("0" + byte.toString(16)).slice(-2))
             })
 
-            const auctionJson = response.data.auctionJson
+            const auctionString = "0x" + auctionHexString.join("")
+
+            const auctionEndOptions = {
+                abi: urbEAuctionAbi,
+                contractAddress: urbEAuctionAddress,
+                functionName: "auctionEnd",
+                params: {
+                    nftAddress: nftAddress,
+                    tokenId: tokenId,
+                    auctionJson: auctionString,
+                },
+            }
+
+            const tx = await runContractFunction({
+                params: auctionEndOptions,
+                onSuccess: (tx) => handleAuctionEndSuccess(tx, listedItem),
+                onError: (error) => console.log(error),
+            })
         } catch (error) {
             console.error(error)
+        }
+    }
+
+    async function handleAuctionEndSuccess(tx, listedItem) {
+        const receipt = await tx.wait()
+        if (receipt.status === 1) {
+            dispatch({
+                type: "success",
+                title: "Nft Transfered!",
+                position: "topR",
+            })
+
+            const formData = new FormData()
+            formData.append("nftId", tokenId)
+            formData.append("winner", listedItem.highestBidder)
+            formData.append("price", listedItem.price)
+            formData.append("txHash", tx.hash)
+
+            try {
+                const response = await axios.post("/end-auction", formData, {
+                    headers: {
+                        "Content-Type": "multipart/form-data",
+                        "X-CSRFToken": csrfToken,
+                    },
+                })
+            } catch (error) {
+                console.error(error)
+            }
+        } else {
+            dispatch({
+                type: "error",
+                title: "Nft Transfer failed!",
+                position: "topR",
+            })
         }
     }
 
@@ -215,8 +260,7 @@ export default function NFTBox({ price, nftAddress, tokenId, urbEAuctionAddress 
     const handleCancelItemSuccess = () => {
         dispatch({
             type: "success",
-            message: "Item canceled!",
-            title: "Item canceled",
+            title: "Item canceled!",
             position: "topR",
         })
     }
@@ -235,10 +279,10 @@ export default function NFTBox({ price, nftAddress, tokenId, urbEAuctionAddress 
                             nftId={tokenId}
                             seller={seller}
                         />
-                        <div className="group [perspective:400px]">
+                        <div className="group [perspective:400px] hover:scale-110 transition-all duration-500">
                             <div
                                 onClick={handleCardClick}
-                                className={`relative h-[410px] !w-[245px] cursor-pointer rounded-3xl sc-iveFHk kKQXBH transition-all duration-500 [transform-style:preserve-3d]  ${
+                                className={`relative h-[410px] !w-[250px] cursor-pointer rounded-3xl sc-iveFHk kKQXBH transition-all duration-500 [transform-style:preserve-3d]  ${
                                     isFlipped ? "[transform:rotateY(180deg)]" : ""
                                 }  `}
                             >
@@ -291,7 +335,8 @@ export default function NFTBox({ price, nftAddress, tokenId, urbEAuctionAddress 
                                                 Cancel Listing
                                             </button>
                                         ) : (
-                                            timeRemaining > 0 && (
+                                            timeRemaining > 0 &&
+                                            account.toLowerCase() !== deployer.toLowerCase() && (
                                                 <button
                                                     onClick={handleButtonClick}
                                                     className="btn btn-outline-primary px-3 py-1 rounded-xl border-2 font-semibold text-[14px] hover:scale-125 transition ease-out duration-500 border-green-600 dark:bg-green-600 text-slate-800"

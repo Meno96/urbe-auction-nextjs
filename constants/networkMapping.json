@@ -1,6 +1,1 @@
-{
-    "5": {
-        "UrbEAuction": ["0xD62B31e3CfDb6Eda7F5bfeC89EF8657360699992"],
-        "UrbEVehicleNft": ["0x5A8f34ECe7Af3dbe2152cc1bD96494E0bBA931c1"]
-    }
-}
+{"5":{"UrbEVehicleNft":["0x5A8f34ECe7Af3dbe2152cc1bD96494E0bBA931c1"],"UrbEAuction":["0x94360757b39682E2cE3bB9AD211d629A43bFae35"]},"31337":{"UrbEAuction":["0x5FbDB2315678afecb367f032d93F642f64180aa3"],"UrbEVehicleNft":["0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512"]}}
