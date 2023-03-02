@@ -89,7 +89,7 @@ export default function Account() {
     return (
         // <div className="max-w-[1536px] min-w-[880px] w-auto mx-auto flex flex-col">
         <div className="flex flex-col items-center">
-            <div className="border-4 border-solid border-green-600 rounded-2xl p-4 m-5 max-w-[1536px] flex flex-col">
+            <div className="border-4 border-solid border-green-600 rounded-2xl p-4 m-5 max-w-[1536px] flex flex-col bg-white bg-opacity-25 dark:bg-slate-900 dark:bg-opacity-20 backdrop-blur-md">
                 {globalState.isStaff ? (
                     <h1 className="mb-5 font-bold text-2xl">Sold NFTs</h1>
                 ) : (
@@ -153,7 +153,7 @@ export default function Account() {
                     )}
                 </div>
             </div>
-            <div className="border-4 border-solid border-green-600 rounded-2xl p-4 m-5 self-center ">
+            <div className="border-4 border-solid border-green-600 rounded-2xl p-4 m-5 self-center bg-white bg-opacity-25 dark:bg-slate-900 dark:bg-opacity-20 backdrop-blur-md">
                 <h1 className="mb-5 font-bold text-2xl">Withdraw Proceeds</h1>
                 {proceeds != 0 && (
                     <div className="mb-2">Withdraw {ethers.utils.formatEther(proceeds)} ETH</div>

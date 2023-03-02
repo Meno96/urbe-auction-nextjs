@@ -1,5 +1,4 @@
 export const lightTheme = {
-    body: "#FFF",
     text: "#111827",
     background: "#F2F6FF",
     transition: "all 3s ease-in-out",
@@ -10,7 +9,6 @@ export const lightTheme = {
     },
 }
 export const darkTheme = {
-    body: "#0f172a",
     text: "#9ca3af",
     cardText: "#FFF",
     background: "#1e293b",

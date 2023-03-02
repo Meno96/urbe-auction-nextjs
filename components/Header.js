@@ -43,7 +43,7 @@ export default function Header(props) {
         return <div>Loading...</div>
     } else {
         return (
-            <nav className="px-5 border-b-[1px] border-green-600 shadow-md">
+            <nav className="px-5 border-b-[1px] border-green-600 shadow-md sticky top-0 z-10 backdrop-blur-lg">
                 <div className="max-w-7xl mx-auto flex flex-row items-center justify-between">
                     <div className="flex-1">
                         <Link href={"/"}>

@@ -152,7 +152,7 @@ export default function NFTBox({ price, nftAddress, tokenId, urbEAuctionAddress,
                 <div className="group [perspective:400px] hover:scale-110 transition-all duration-500">
                     <div
                         onClick={handleCardClick}
-                        className={`h-[410px] w-[250px] relative cursor-pointer rounded-3xl sc-iveFHk kKQXBH transition-all duration-500 [transform-style:preserve-3d]  ${
+                        className={`h-[410px] w-[250px] relative cursor-pointer rounded-3xl transition-all duration-500 [transform-style:preserve-3d] bg-white bg-opacity-50 dark:bg-slate-800 dark:bg-opacity-50 border-solid border border-gray-200 dark:border-gray-700 ${
                             isFlipped ? "[transform:rotateY(180deg)]" : ""
                         }  `}
                     >
@@ -182,7 +182,7 @@ export default function NFTBox({ price, nftAddress, tokenId, urbEAuctionAddress,
                                     {ethers.utils.formatUnits(price, "ether")} ETH
                                 </div>
                             </div>
-                            <div className="flex justify-center mt-3 font-semibold text-lg">
+                            <div className="flex justify-center mt-3 font-semibold text-lg text-sky-500">
                                 <h2>{tokenName}</h2>
                             </div>
                         </div>
