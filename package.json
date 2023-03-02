@@ -5,11 +5,11 @@
     "author": "Daniele Menin",
     "license": "MIT",
     "scripts": {
-        "dev": "next dev",
-        "build": "next build",
-        "start": "next start",
-        "lint": "next lint",
-        "export": "next export",
+        "dev": "yarn dev",
+        "build": "yarn build",
+        "start": "yarn start",
+        "lint": "yarn lint",
+        "export": "yarn export",
         "moralis:sync": "moralis-admin-cli connect-local-devchain --chain hardhat --moralisSubdomain wciosc5v5doe.usemoralis.com --frpcPath ./frp/frpc",
         "moralis:cloud": "moralis-admin-cli watch-cloud-folder --moralisSubdomain wciosc5v5doe.usemoralis.com --autoSave 1 --moralisCloudfolder ./cloudFunctions",
         "watch": "yarn tailwindcss -i ./styles/globals.css -o ./styles/Home.module.css --watch --minify"
