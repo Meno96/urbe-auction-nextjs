@@ -44,72 +44,69 @@ export default function Header(props) {
     } else {
         return (
             <nav className="px-5 border-b-[1px] border-green-600 shadow-md sticky top-0 z-10 ">
-                <div className="relative max-w-7xl mx-auto flex flex-row">
-                    <div className="max-w-7xl w-full flex flex-row items-center justify-between backdrop-blur-lg">
-                        <div className="flex-1">
-                            <Link href={"/"}>
-                                <div className="p-1 w-[190px] h-[60px] cursor-pointer hover:scale-125 flex items-center">
-                                    <Image src="next/Logo.png" height="60" width="190" />
-                                </div>
-                            </Link>
-                        </div>
-                        <div className="flex flex-row flex-none items-center justify-center">
-                            <Link href={"/"}>
+                <div className="max-w-7xl mx-auto flex flex-row items-center justify-between backdrop-blur-lg">
+                    <div className="flex-1">
+                        <Link href={"/"}>
+                            <div className="p-1 w-[190px] h-[60px] cursor-pointer hover:scale-125 flex items-center">
+                                <Image src="next/Logo.png" height="60" width="190" />
+                            </div>
+                        </Link>
+                    </div>
+                    <div className="flex flex-row flex-none items-center justify-center">
+                        <Link href={"/"}>
+                            <a
+                                className={`mr-4 p-6 hover:scale-125 ${
+                                    currentPath === "/"
+                                        ? "text-green-600 hover:text-green-600"
+                                        : "hover:text-slate-500 dark:hover:text-gray-100"
+                                } `}
+                            >
+                                Home
+                            </a>
+                        </Link>
+                        {isStaff && isWeb3Enabled && (
+                            <Link href={"/add-nft"}>
                                 <a
                                     className={`mr-4 p-6 hover:scale-125 ${
-                                        currentPath === "/"
+                                        currentPath === "/add-nft"
                                             ? "text-green-600 hover:text-green-600"
                                             : "hover:text-slate-500 dark:hover:text-gray-100"
                                     } `}
                                 >
-                                    Home
+                                    Add NFT
                                 </a>
                             </Link>
-                            {isStaff && isWeb3Enabled && (
-                                <Link href={"/add-nft"}>
-                                    <a
-                                        className={`mr-4 p-6 hover:scale-125 ${
-                                            currentPath === "/add-nft"
-                                                ? "text-green-600 hover:text-green-600"
-                                                : "hover:text-slate-500 dark:hover:text-gray-100"
-                                        } `}
-                                    >
-                                        Add NFT
-                                    </a>
-                                </Link>
-                            )}
+                        )}
 
-                            {isStaff && isWeb3Enabled && (
-                                <Link href={"/sell-nft"}>
-                                    <a
-                                        className={`mr-4 p-6 hover:scale-125 ${
-                                            currentPath === "/sell-nft"
-                                                ? "text-green-600 hover:text-green-600"
-                                                : "hover:text-slate-500 dark:hover:text-gray-100"
-                                        } `}
-                                    >
-                                        Sell NFT
-                                    </a>
-                                </Link>
-                            )}
+                        {isStaff && isWeb3Enabled && (
+                            <Link href={"/sell-nft"}>
+                                <a
+                                    className={`mr-4 p-6 hover:scale-125 ${
+                                        currentPath === "/sell-nft"
+                                            ? "text-green-600 hover:text-green-600"
+                                            : "hover:text-slate-500 dark:hover:text-gray-100"
+                                    } `}
+                                >
+                                    Sell NFT
+                                </a>
+                            </Link>
+                        )}
 
-                            {isWeb3Enabled && (
-                                <Link href={"/account"}>
-                                    <a
-                                        className={`mr-4 p-6 hover:scale-125 ${
-                                            currentPath === "/account"
-                                                ? "text-green-600 hover:text-green-600"
-                                                : "hover:text-slate-500 dark:hover:text-gray-100"
-                                        } `}
-                                    >
-                                        Account
-                                    </a>
-                                </Link>
-                            )}
-                        </div>
-                        <div className="w-[330px] flex-1"></div>
+                        {isWeb3Enabled && (
+                            <Link href={"/account"}>
+                                <a
+                                    className={`mr-4 p-6 hover:scale-125 ${
+                                        currentPath === "/account"
+                                            ? "text-green-600 hover:text-green-600"
+                                            : "hover:text-slate-500 dark:hover:text-gray-100"
+                                    } `}
+                                >
+                                    Account
+                                </a>
+                            </Link>
+                        )}
                     </div>
-                    <div className="absolute right-0 flex flex-row flex-none items-center">
+                    <div className="flex flex-row flex-1 w-[330px] items-center justify-end">
                         <div className="flex flex-col">
                             <div className="flex justify-center">
                                 <span>Hello, {username}</span>

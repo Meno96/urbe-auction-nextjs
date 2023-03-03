@@ -16,6 +16,10 @@
     }
 }
 
+.sc-cUEOzv.bbLBs {
+    @apply max-h-none !important;
+}
+
 /********** Form *************/
 .sc-jTjUTQ.LlhSP {
     @apply dark:bg-slate-800 !important;
