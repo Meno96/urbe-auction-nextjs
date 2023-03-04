@@ -33,7 +33,7 @@ export default function Header(props) {
 
     async function handleLogout() {
         try {
-            await axios.post("http://localhost:8000/logout")
+            await axios.post("https://urbe-auction.herokuapp.com/logout")
             router.push("/sign-in")
         } catch (error) {
             console.error(error)

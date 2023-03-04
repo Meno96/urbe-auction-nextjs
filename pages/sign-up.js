@@ -38,12 +38,16 @@ export default function SignIn() {
             console.log(csrfToken)
 
             try {
-                const response = await axios.post("http://localhost:8000/sign-up", formData, {
-                    headers: {
-                        "Content-Type": "multipart/form-data",
-                        "X-CSRFToken": csrfToken,
-                    },
-                })
+                const response = await axios.post(
+                    "https://urbe-auction.herokuapp.com/sign-up",
+                    formData,
+                    {
+                        headers: {
+                            "Content-Type": "multipart/form-data",
+                            "X-CSRFToken": csrfToken,
+                        },
+                    }
+                )
 
                 if (response.data.success) {
                     router.push({

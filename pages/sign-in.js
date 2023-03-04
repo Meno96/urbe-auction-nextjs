@@ -36,12 +36,16 @@ export default function SignIn() {
         formData.append("password", password)
 
         try {
-            const response = await axios.post("http://localhost:8000/sign-in", formData, {
-                headers: {
-                    "Content-Type": "multipart/form-data",
-                    "X-CSRFToken": Cookies.get("csrftoken"),
-                },
-            })
+            const response = await axios.post(
+                "https://urbe-auction.herokuapp.com/sign-in",
+                formData,
+                {
+                    headers: {
+                        "Content-Type": "multipart/form-data",
+                        "X-CSRFToken": Cookies.get("csrftoken"),
+                    },
+                }
+            )
 
             if (response.data.success) {
                 const isUserStaff = response.data.isStaff
