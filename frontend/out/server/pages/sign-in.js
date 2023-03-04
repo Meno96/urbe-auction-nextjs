@@ -1,326 +1,112 @@
 "use strict";
+/*
+ * ATTENTION: An "eval-source-map" devtool has been used.
+ * This devtool is neither made for production nor for readable output files.
+ * It uses "eval()" calls to create a separate source file with attached SourceMaps in the browser devtools.
+ * If you are trying to read the output file, select a different devtool (https://webpack.js.org/configuration/devtool/)
+ * or disable the default devtool with "devtool: false".
+ * If you are looking for production-ready output files, see mode: "production" (https://webpack.js.org/configuration/mode/).
+ */
 (() => {
 var exports = {};
-exports.id = 312;
-exports.ids = [312];
+exports.id = "pages/sign-in";
+exports.ids = ["pages/sign-in"];
 exports.modules = {
 
-/***/ 938:
+/***/ "./pages/sign-in.js":
+/*!**************************!*\
+  !*** ./pages/sign-in.js ***!
+  \**************************/
 /***/ ((module, __webpack_exports__, __webpack_require__) => {
 
-__webpack_require__.a(module, async (__webpack_handle_async_dependencies__, __webpack_async_result__) => { try {
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (/* binding */ SignIn)
-/* harmony export */ });
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(997);
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var react_hook_form__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(5641);
-/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(9648);
-/* harmony import */ var bcryptjs__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(8432);
-/* harmony import */ var bcryptjs__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(bcryptjs__WEBPACK_IMPORTED_MODULE_3__);
-/* harmony import */ var next_router__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(1853);
-/* harmony import */ var next_router__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(next_router__WEBPACK_IMPORTED_MODULE_4__);
-/* harmony import */ var querystring__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(9819);
-/* harmony import */ var querystring__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(querystring__WEBPACK_IMPORTED_MODULE_5__);
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(6689);
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_6__);
-/* harmony import */ var js_cookie__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(9915);
-/* harmony import */ var _utils_GlobalStateContext__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(6162);
-var __webpack_async_dependencies__ = __webpack_handle_async_dependencies__([react_hook_form__WEBPACK_IMPORTED_MODULE_1__, axios__WEBPACK_IMPORTED_MODULE_2__, js_cookie__WEBPACK_IMPORTED_MODULE_7__]);
-([react_hook_form__WEBPACK_IMPORTED_MODULE_1__, axios__WEBPACK_IMPORTED_MODULE_2__, js_cookie__WEBPACK_IMPORTED_MODULE_7__] = __webpack_async_dependencies__.then ? (await __webpack_async_dependencies__)() : __webpack_async_dependencies__);
-
-
-
-
-
-
-
-
-
-function SignIn() {
-    const router = (0,next_router__WEBPACK_IMPORTED_MODULE_4__.useRouter)();
-    const csrfToken = js_cookie__WEBPACK_IMPORTED_MODULE_7__["default"].get("csrftoken");
-    const { globalState , setGlobalState  } = (0,react__WEBPACK_IMPORTED_MODULE_6__.useContext)(_utils_GlobalStateContext__WEBPACK_IMPORTED_MODULE_8__/* .GlobalStateContext */ .P);
-    const { 0: message , 1: setMessage  } = (0,react__WEBPACK_IMPORTED_MODULE_6__.useState)("");
-    const { 0: error1 , 1: setError  } = (0,react__WEBPACK_IMPORTED_MODULE_6__.useState)("");
-    const { 0: showPassword , 1: setShowPassword  } = (0,react__WEBPACK_IMPORTED_MODULE_6__.useState)(false);
-    (0,react__WEBPACK_IMPORTED_MODULE_6__.useEffect)(()=>{
-        setMessage(querystring__WEBPACK_IMPORTED_MODULE_5___default().parse(router.asPath.split(/\?/)[1]).message);
-    }, [
-        router.asPath
-    ]);
-    const { register , handleSubmit , formState: { errors  } ,  } = (0,react_hook_form__WEBPACK_IMPORTED_MODULE_1__.useForm)();
-    const onSubmit = async (data)=>{
-        const username = data.username;
-        const password = data.password;
-        setGlobalState({
-            ...globalState,
-            isStaff: false,
-            username: username
-        });
-        const formData = new FormData();
-        formData.append("username", username);
-        formData.append("password", password);
-        try {
-            const response = await axios__WEBPACK_IMPORTED_MODULE_2__["default"].post("/sign-in", formData, {
-                headers: {
-                    "Content-Type": "multipart/form-data",
-                    "X-CSRFToken": csrfToken
-                }
-            });
-            if (response.data.success) {
-                const isUserStaff = response.data.isStaff;
-                if (isUserStaff) {
-                    setGlobalState({
-                        ...globalState,
-                        isStaff: true,
-                        username: username
-                    });
-                }
-                router.push("/");
-            } else {
-                let errorMessage = response.data.messages[0].message;
-                setError(errorMessage);
-                console.log("Wrong username or password.");
-            }
-        } catch (error) {
-            console.error(error);
-        }
-    };
-    const toggleShowPassword = ()=>{
-        setShowPassword((prevState)=>!prevState
-        );
-    };
-    return /*#__PURE__*/ react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx("div", {
-        className: "w-[100%] h-[100vh] flex flex-col",
-        children: /*#__PURE__*/ react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx("div", {
-            className: "h-[100%] flex flex-col justify-center items-center",
-            children: /*#__PURE__*/ (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)("div", {
-                children: [
-                    /*#__PURE__*/ react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx("div", {
-                        children: message && message.length > 0 && /*#__PURE__*/ react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx("div", {
-                            className: "text-green-600 mb-3",
-                            children: message
-                        })
-                    }),
-                    /*#__PURE__*/ (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)("form", {
-                        onSubmit: handleSubmit(onSubmit),
-                        className: "w-[360px] p-4 transition duration-700 text-gray-900 dark:text-gray-400 border-4 border-solid border-green-600 rounded-2xl bg-white bg-opacity-25 dark:bg-slate-900 dark:bg-opacity-20 backdrop-blur-md",
-                        children: [
-                            /*#__PURE__*/ react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx("p", {
-                                className: "text-xl text-slate-500 dark:text-slate-400 mt-2",
-                                children: "Sign In!"
-                            }),
-                            /*#__PURE__*/ (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)("div", {
-                                className: "relative form-group my-7",
-                                children: [
-                                    /*#__PURE__*/ react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx("input", {
-                                        type: "text",
-                                        id: "username",
-                                        placeholder: " ",
-                                        className: `rounded-2xl w-[100%] bg-transparent border hover:border-sky-600 transition duration-500 p-2 px-4 form-control focus:outline-none focus:ring-0 focus:border-sky-600 peer autofill:bg-transparent ${errors.username ? "is-invalid border-red-500" : ""}`,
-                                        ...register("username", {
-                                            required: true
-                                        })
-                                    }),
-                                    errors.username && /*#__PURE__*/ react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx("strong", {
-                                        className: "invalid-feedback text-red-500 ml-5 text-[12px] font-sans font-medium",
-                                        children: "This field is required"
-                                    }),
-                                    /*#__PURE__*/ react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx("label", {
-                                        htmlFor: "username",
-                                        className: `absolute left-3 top-1 text-gray-900 dark:text-gray-400 transition duration-500 transform -translate-y-4 scale-75 z-10 origin-[0] bg-white dark:bg-slate-800 px-2 peer-focus:px-2 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-5 peer-focus:top-0 peer-focus:left-3 peer-focus:scale-75 peer-focus:-translate-y-4 ${errors.username ? "is-invalid" : ""}`,
-                                        children: "Username*"
-                                    })
-                                ]
-                            }),
-                            /*#__PURE__*/ (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)("div", {
-                                className: "relative form-group my-7",
-                                children: [
-                                    /*#__PURE__*/ react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx("input", {
-                                        type: showPassword ? "text" : "password",
-                                        id: "password",
-                                        placeholder: " ",
-                                        className: `rounded-2xl w-[100%] bg-transparent border hover:border-sky-600 transition duration-500 p-2 px-4 form-control focus:outline-none focus:ring-0 focus:border-sky-600 peer ${errors.password ? "is-invalid border-red-500" : ""}`,
-                                        ...register("password", {
-                                            required: true
-                                        })
-                                    }),
-                                    /*#__PURE__*/ react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx("button", {
-                                        type: "button",
-                                        className: "absolute top-2 right-5 text-gray-900 dark:text-gray-400 hover:text-sky-600 transition duration-500",
-                                        onClick: toggleShowPassword,
-                                        children: showPassword ? /*#__PURE__*/ react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx("svg", {
-                                            xmlns: "http://www.w3.org/2000/svg",
-                                            fill: "none",
-                                            viewBox: "0 0 24 24",
-                                            strokeWidth: "1.5",
-                                            stroke: "currentColor",
-                                            className: "w-6 h-6",
-                                            children: /*#__PURE__*/ react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx("path", {
-                                                strokeLinecap: "round",
-                                                strokeLinejoin: "round",
-                                                d: "M3.98 8.223A10.477 10.477 0 001.934 12C3.226 16.338 7.244 19.5 12 19.5c.993 0 1.953-.138 2.863-.395M6.228 6.228A10.45 10.45 0 0112 4.5c4.756 0 8.773 3.162 10.065 7.498a10.523 10.523 0 01-4.293 5.774M6.228 6.228L3 3m3.228 3.228l3.65 3.65m7.894 7.894L21 21m-3.228-3.228l-3.65-3.65m0 0a3 3 0 10-4.243-4.243m4.242 4.242L9.88 9.88"
-                                            })
-                                        }) : /*#__PURE__*/ (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)("svg", {
-                                            xmlns: "http://www.w3.org/2000/svg",
-                                            fill: "none",
-                                            viewBox: "0 0 24 24",
-                                            strokeWidth: "1.5",
-                                            stroke: "currentColor",
-                                            className: "w-6 h-6",
-                                            children: [
-                                                /*#__PURE__*/ react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx("path", {
-                                                    strokeLinecap: "round",
-                                                    strokeLinejoin: "round",
-                                                    d: "M2.036 12.322a1.012 1.012 0 010-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178z"
-                                                }),
-                                                /*#__PURE__*/ react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx("path", {
-                                                    strokeLinecap: "round",
-                                                    strokeLinejoin: "round",
-                                                    d: "M15 12a3 3 0 11-6 0 3 3 0 016 0z"
-                                                })
-                                            ]
-                                        })
-                                    }),
-                                    errors.password && /*#__PURE__*/ react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx("strong", {
-                                        className: "invalid-feedback text-red-500 ml-5 text-[12px] font-sans font-medium",
-                                        children: "This field is required"
-                                    }),
-                                    /*#__PURE__*/ react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx("label", {
-                                        htmlFor: "password",
-                                        className: `absolute left-3 top-1 text-gray-900 dark:text-gray-400 transition duration-500 transform -translate-y-4 scale-75 z-10 origin-[0] bg-white dark:bg-slate-800 px-2 peer-focus:px-2 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-5 peer-focus:top-0 peer-focus:left-3 peer-focus:scale-75 peer-focus:-translate-y-4   ${errors.password ? "is-invalid" : ""}`,
-                                        children: "Password*"
-                                    })
-                                ]
-                            }),
-                            /*#__PURE__*/ react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx("button", {
-                                type: "submit",
-                                className: "btn btn-outline-primary px-3 py-1 rounded-xl border-2 font-semibold text-[14px] hover:scale-125 transition ease-out duration-500 border-green-600 dark:bg-green-600 text-slate-800",
-                                children: "Submit"
-                            })
-                        ]
-                    }),
-                    /*#__PURE__*/ (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)("div", {
-                        className: "flex mt-3 self-start",
-                        children: [
-                            /*#__PURE__*/ react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx("div", {
-                                children: "Don't have an account yet? "
-                            }),
-                            /*#__PURE__*/ react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx("div", {
-                                className: "ml-2 hover:scale-125",
-                                children: /*#__PURE__*/ react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx("a", {
-                                    href: "/sign-up",
-                                    className: "cursor-pointer text-green-600 ",
-                                    children: "Sign Up!"
-                                })
-                            })
-                        ]
-                    }),
-                    /*#__PURE__*/ react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx("div", {
-                        children: error1 && error1.length > 0 && /*#__PURE__*/ (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)("div", {
-                            className: "mt-3 text-red-500",
-                            children: [
-                                "- ",
-                                error1
-                            ]
-                        })
-                    })
-                ]
-            })
-        })
-    });
-};
-
-__webpack_async_result__();
-} catch(e) { __webpack_async_result__(e); } });
+eval("__webpack_require__.a(module, async (__webpack_handle_async_dependencies__, __webpack_async_result__) => { try {\n__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   \"default\": () => (/* binding */ SignIn)\n/* harmony export */ });\n/* harmony import */ var react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react/jsx-dev-runtime */ \"react/jsx-dev-runtime\");\n/* harmony import */ var react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__);\n/* harmony import */ var react_hook_form__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-hook-form */ \"react-hook-form\");\n/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! axios */ \"axios\");\n/* harmony import */ var bcryptjs__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! bcryptjs */ \"bcryptjs\");\n/* harmony import */ var bcryptjs__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(bcryptjs__WEBPACK_IMPORTED_MODULE_3__);\n/* harmony import */ var next_router__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! next/router */ \"next/router\");\n/* harmony import */ var next_router__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(next_router__WEBPACK_IMPORTED_MODULE_4__);\n/* harmony import */ var querystring__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! querystring */ \"querystring\");\n/* harmony import */ var querystring__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(querystring__WEBPACK_IMPORTED_MODULE_5__);\n/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! react */ \"react\");\n/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_6__);\n/* harmony import */ var js_cookie__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! js-cookie */ \"js-cookie\");\n/* harmony import */ var _utils_GlobalStateContext__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../utils/GlobalStateContext */ \"./utils/GlobalStateContext.js\");\nvar __webpack_async_dependencies__ = __webpack_handle_async_dependencies__([react_hook_form__WEBPACK_IMPORTED_MODULE_1__, axios__WEBPACK_IMPORTED_MODULE_2__, js_cookie__WEBPACK_IMPORTED_MODULE_7__]);\n([react_hook_form__WEBPACK_IMPORTED_MODULE_1__, axios__WEBPACK_IMPORTED_MODULE_2__, js_cookie__WEBPACK_IMPORTED_MODULE_7__] = __webpack_async_dependencies__.then ? (await __webpack_async_dependencies__)() : __webpack_async_dependencies__);\n\n\n\n\n\n\n\n\n\nfunction SignIn() {\n    const router = (0,next_router__WEBPACK_IMPORTED_MODULE_4__.useRouter)();\n    const csrfToken = js_cookie__WEBPACK_IMPORTED_MODULE_7__[\"default\"].get(\"csrftoken\");\n    const { globalState , setGlobalState  } = (0,react__WEBPACK_IMPORTED_MODULE_6__.useContext)(_utils_GlobalStateContext__WEBPACK_IMPORTED_MODULE_8__.GlobalStateContext);\n    const { 0: message , 1: setMessage  } = (0,react__WEBPACK_IMPORTED_MODULE_6__.useState)(\"\");\n    const { 0: error1 , 1: setError  } = (0,react__WEBPACK_IMPORTED_MODULE_6__.useState)(\"\");\n    const { 0: showPassword , 1: setShowPassword  } = (0,react__WEBPACK_IMPORTED_MODULE_6__.useState)(false);\n    (0,react__WEBPACK_IMPORTED_MODULE_6__.useEffect)(()=>{\n        setMessage(querystring__WEBPACK_IMPORTED_MODULE_5___default().parse(router.asPath.split(/\\?/)[1]).message);\n    }, [\n        router.asPath\n    ]);\n    const { register , handleSubmit , formState: { errors  } ,  } = (0,react_hook_form__WEBPACK_IMPORTED_MODULE_1__.useForm)();\n    const onSubmit = async (data)=>{\n        const username = data.username;\n        const password = data.password;\n        setGlobalState({\n            ...globalState,\n            isStaff: false,\n            username: username\n        });\n        const formData = new FormData();\n        formData.append(\"username\", username);\n        formData.append(\"password\", password);\n        try {\n            const response = await axios__WEBPACK_IMPORTED_MODULE_2__[\"default\"].post(\"http://localhost:8000/sign-in\", formData, {\n                headers: {\n                    \"Content-Type\": \"multipart/form-data\",\n                    \"X-CSRFToken\": js_cookie__WEBPACK_IMPORTED_MODULE_7__[\"default\"].get(\"csrftoken\")\n                }\n            });\n            if (response.data.success) {\n                const isUserStaff = response.data.isStaff;\n                if (isUserStaff) {\n                    setGlobalState({\n                        ...globalState,\n                        isStaff: true,\n                        username: username\n                    });\n                }\n                router.push(\"/\");\n            } else {\n                let errorMessage = response.data.messages[0].message;\n                setError(errorMessage);\n                console.log(\"Wrong username or password.\");\n            }\n        } catch (error) {\n            console.error(error);\n        }\n    };\n    const toggleShowPassword = ()=>{\n        setShowPassword((prevState)=>!prevState\n        );\n    };\n    return /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxDEV)(\"div\", {\n        className: \"w-[100%] h-[100vh] flex flex-col\",\n        children: /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxDEV)(\"div\", {\n            className: \"h-[100%] flex flex-col justify-center items-center\",\n            children: /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxDEV)(\"div\", {\n                children: [\n                    /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxDEV)(\"div\", {\n                        children: message && message.length > 0 && /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxDEV)(\"div\", {\n                            className: \"text-green-600 mb-3\",\n                            children: message\n                        }, void 0, false, {\n                            fileName: \"/home/meno/Dev/Blockchain/UrbE/urbe-django/frontend/pages/sign-in.js\",\n                            lineNumber: 73,\n                            columnNumber: 29\n                        }, this)\n                    }, void 0, false, {\n                        fileName: \"/home/meno/Dev/Blockchain/UrbE/urbe-django/frontend/pages/sign-in.js\",\n                        lineNumber: 71,\n                        columnNumber: 21\n                    }, this),\n                    /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxDEV)(\"form\", {\n                        onSubmit: handleSubmit(onSubmit),\n                        className: \"w-[360px] p-4 transition duration-700 text-gray-900 dark:text-gray-400 border-4 border-solid border-green-600 rounded-2xl bg-white bg-opacity-25 dark:bg-slate-900 dark:bg-opacity-20 backdrop-blur-md\",\n                        children: [\n                            /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxDEV)(\"p\", {\n                                className: \"text-xl text-slate-500 dark:text-slate-400 mt-2\",\n                                children: \"Sign In!\"\n                            }, void 0, false, {\n                                fileName: \"/home/meno/Dev/Blockchain/UrbE/urbe-django/frontend/pages/sign-in.js\",\n                                lineNumber: 80,\n                                columnNumber: 25\n                            }, this),\n                            /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxDEV)(\"div\", {\n                                className: \"relative form-group my-7\",\n                                children: [\n                                    /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxDEV)(\"input\", {\n                                        type: \"text\",\n                                        id: \"username\",\n                                        placeholder: \" \",\n                                        className: `rounded-2xl w-[100%] bg-transparent border hover:border-sky-600 transition duration-500 p-2 px-4 form-control focus:outline-none focus:ring-0 focus:border-sky-600 peer autofill:bg-transparent ${errors.username ? \"is-invalid border-red-500\" : \"\"}`,\n                                        ...register(\"username\", {\n                                            required: true\n                                        })\n                                    }, void 0, false, {\n                                        fileName: \"/home/meno/Dev/Blockchain/UrbE/urbe-django/frontend/pages/sign-in.js\",\n                                        lineNumber: 82,\n                                        columnNumber: 29\n                                    }, this),\n                                    errors.username && /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxDEV)(\"strong\", {\n                                        className: \"invalid-feedback text-red-500 ml-5 text-[12px] font-sans font-medium\",\n                                        children: \"This field is required\"\n                                    }, void 0, false, {\n                                        fileName: \"/home/meno/Dev/Blockchain/UrbE/urbe-django/frontend/pages/sign-in.js\",\n                                        lineNumber: 92,\n                                        columnNumber: 33\n                                    }, this),\n                                    /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxDEV)(\"label\", {\n                                        htmlFor: \"username\",\n                                        className: `absolute left-3 top-1 text-gray-900 dark:text-gray-400 transition duration-500 transform -translate-y-4 scale-75 z-10 origin-[0] bg-white dark:bg-slate-800 px-2 peer-focus:px-2 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-5 peer-focus:top-0 peer-focus:left-3 peer-focus:scale-75 peer-focus:-translate-y-4 ${errors.username ? \"is-invalid\" : \"\"}`,\n                                        children: \"Username*\"\n                                    }, void 0, false, {\n                                        fileName: \"/home/meno/Dev/Blockchain/UrbE/urbe-django/frontend/pages/sign-in.js\",\n                                        lineNumber: 96,\n                                        columnNumber: 29\n                                    }, this)\n                                ]\n                            }, void 0, true, {\n                                fileName: \"/home/meno/Dev/Blockchain/UrbE/urbe-django/frontend/pages/sign-in.js\",\n                                lineNumber: 81,\n                                columnNumber: 25\n                            }, this),\n                            /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxDEV)(\"div\", {\n                                className: \"relative form-group my-7\",\n                                children: [\n                                    /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxDEV)(\"input\", {\n                                        type: showPassword ? \"text\" : \"password\",\n                                        id: \"password\",\n                                        placeholder: \" \",\n                                        className: `rounded-2xl w-[100%] bg-transparent border hover:border-sky-600 transition duration-500 p-2 px-4 form-control focus:outline-none focus:ring-0 focus:border-sky-600 peer ${errors.password ? \"is-invalid border-red-500\" : \"\"}`,\n                                        ...register(\"password\", {\n                                            required: true\n                                        })\n                                    }, void 0, false, {\n                                        fileName: \"/home/meno/Dev/Blockchain/UrbE/urbe-django/frontend/pages/sign-in.js\",\n                                        lineNumber: 106,\n                                        columnNumber: 29\n                                    }, this),\n                                    /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxDEV)(\"button\", {\n                                        type: \"button\",\n                                        className: \"absolute top-2 right-5 text-gray-900 dark:text-gray-400 hover:text-sky-600 transition duration-500\",\n                                        onClick: toggleShowPassword,\n                                        children: showPassword ? /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxDEV)(\"svg\", {\n                                            xmlns: \"http://www.w3.org/2000/svg\",\n                                            fill: \"none\",\n                                            viewBox: \"0 0 24 24\",\n                                            strokeWidth: \"1.5\",\n                                            stroke: \"currentColor\",\n                                            className: \"w-6 h-6\",\n                                            children: /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxDEV)(\"path\", {\n                                                strokeLinecap: \"round\",\n                                                strokeLinejoin: \"round\",\n                                                d: \"M3.98 8.223A10.477 10.477 0 001.934 12C3.226 16.338 7.244 19.5 12 19.5c.993 0 1.953-.138 2.863-.395M6.228 6.228A10.45 10.45 0 0112 4.5c4.756 0 8.773 3.162 10.065 7.498a10.523 10.523 0 01-4.293 5.774M6.228 6.228L3 3m3.228 3.228l3.65 3.65m7.894 7.894L21 21m-3.228-3.228l-3.65-3.65m0 0a3 3 0 10-4.243-4.243m4.242 4.242L9.88 9.88\"\n                                            }, void 0, false, {\n                                                fileName: \"/home/meno/Dev/Blockchain/UrbE/urbe-django/frontend/pages/sign-in.js\",\n                                                lineNumber: 129,\n                                                columnNumber: 41\n                                            }, this)\n                                        }, void 0, false, {\n                                            fileName: \"/home/meno/Dev/Blockchain/UrbE/urbe-django/frontend/pages/sign-in.js\",\n                                            lineNumber: 121,\n                                            columnNumber: 37\n                                        }, this) : /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxDEV)(\"svg\", {\n                                            xmlns: \"http://www.w3.org/2000/svg\",\n                                            fill: \"none\",\n                                            viewBox: \"0 0 24 24\",\n                                            strokeWidth: \"1.5\",\n                                            stroke: \"currentColor\",\n                                            className: \"w-6 h-6\",\n                                            children: [\n                                                /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxDEV)(\"path\", {\n                                                    strokeLinecap: \"round\",\n                                                    strokeLinejoin: \"round\",\n                                                    d: \"M2.036 12.322a1.012 1.012 0 010-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178z\"\n                                                }, void 0, false, {\n                                                    fileName: \"/home/meno/Dev/Blockchain/UrbE/urbe-django/frontend/pages/sign-in.js\",\n                                                    lineNumber: 144,\n                                                    columnNumber: 41\n                                                }, this),\n                                                /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxDEV)(\"path\", {\n                                                    strokeLinecap: \"round\",\n                                                    strokeLinejoin: \"round\",\n                                                    d: \"M15 12a3 3 0 11-6 0 3 3 0 016 0z\"\n                                                }, void 0, false, {\n                                                    fileName: \"/home/meno/Dev/Blockchain/UrbE/urbe-django/frontend/pages/sign-in.js\",\n                                                    lineNumber: 149,\n                                                    columnNumber: 41\n                                                }, this)\n                                            ]\n                                        }, void 0, true, {\n                                            fileName: \"/home/meno/Dev/Blockchain/UrbE/urbe-django/frontend/pages/sign-in.js\",\n                                            lineNumber: 136,\n                                            columnNumber: 37\n                                        }, this)\n                                    }, void 0, false, {\n                                        fileName: \"/home/meno/Dev/Blockchain/UrbE/urbe-django/frontend/pages/sign-in.js\",\n                                        lineNumber: 115,\n                                        columnNumber: 29\n                                    }, this),\n                                    errors.password && /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxDEV)(\"strong\", {\n                                        className: \"invalid-feedback text-red-500 ml-5 text-[12px] font-sans font-medium\",\n                                        children: \"This field is required\"\n                                    }, void 0, false, {\n                                        fileName: \"/home/meno/Dev/Blockchain/UrbE/urbe-django/frontend/pages/sign-in.js\",\n                                        lineNumber: 158,\n                                        columnNumber: 33\n                                    }, this),\n                                    /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxDEV)(\"label\", {\n                                        htmlFor: \"password\",\n                                        className: `absolute left-3 top-1 text-gray-900 dark:text-gray-400 transition duration-500 transform -translate-y-4 scale-75 z-10 origin-[0] bg-white dark:bg-slate-800 px-2 peer-focus:px-2 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-5 peer-focus:top-0 peer-focus:left-3 peer-focus:scale-75 peer-focus:-translate-y-4   ${errors.password ? \"is-invalid\" : \"\"}`,\n                                        children: \"Password*\"\n                                    }, void 0, false, {\n                                        fileName: \"/home/meno/Dev/Blockchain/UrbE/urbe-django/frontend/pages/sign-in.js\",\n                                        lineNumber: 162,\n                                        columnNumber: 29\n                                    }, this)\n                                ]\n                            }, void 0, true, {\n                                fileName: \"/home/meno/Dev/Blockchain/UrbE/urbe-django/frontend/pages/sign-in.js\",\n                                lineNumber: 105,\n                                columnNumber: 25\n                            }, this),\n                            /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxDEV)(\"button\", {\n                                type: \"submit\",\n                                className: \"btn btn-outline-primary px-3 py-1 rounded-xl border-2 font-semibold text-[14px] hover:scale-125 transition ease-out duration-500 border-green-600 dark:bg-green-600 text-slate-800\",\n                                children: \"Submit\"\n                            }, void 0, false, {\n                                fileName: \"/home/meno/Dev/Blockchain/UrbE/urbe-django/frontend/pages/sign-in.js\",\n                                lineNumber: 171,\n                                columnNumber: 25\n                            }, this)\n                        ]\n                    }, void 0, true, {\n                        fileName: \"/home/meno/Dev/Blockchain/UrbE/urbe-django/frontend/pages/sign-in.js\",\n                        lineNumber: 76,\n                        columnNumber: 21\n                    }, this),\n                    /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxDEV)(\"div\", {\n                        className: \"flex mt-3 self-start\",\n                        children: [\n                            /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxDEV)(\"div\", {\n                                children: \"Don't have an account yet? \"\n                            }, void 0, false, {\n                                fileName: \"/home/meno/Dev/Blockchain/UrbE/urbe-django/frontend/pages/sign-in.js\",\n                                lineNumber: 179,\n                                columnNumber: 25\n                            }, this),\n                            /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxDEV)(\"div\", {\n                                className: \"ml-2 hover:scale-125\",\n                                children: /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxDEV)(\"a\", {\n                                    href: \"/sign-up\",\n                                    className: \"cursor-pointer text-green-600 \",\n                                    children: \"Sign Up!\"\n                                }, void 0, false, {\n                                    fileName: \"/home/meno/Dev/Blockchain/UrbE/urbe-django/frontend/pages/sign-in.js\",\n                                    lineNumber: 181,\n                                    columnNumber: 29\n                                }, this)\n                            }, void 0, false, {\n                                fileName: \"/home/meno/Dev/Blockchain/UrbE/urbe-django/frontend/pages/sign-in.js\",\n                                lineNumber: 180,\n                                columnNumber: 25\n                            }, this)\n                        ]\n                    }, void 0, true, {\n                        fileName: \"/home/meno/Dev/Blockchain/UrbE/urbe-django/frontend/pages/sign-in.js\",\n                        lineNumber: 178,\n                        columnNumber: 21\n                    }, this),\n                    /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxDEV)(\"div\", {\n                        children: error1 && error1.length > 0 && /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxDEV)(\"div\", {\n                            className: \"mt-3 text-red-500\",\n                            children: [\n                                \"- \",\n                                error1\n                            ]\n                        }, void 0, true, {\n                            fileName: \"/home/meno/Dev/Blockchain/UrbE/urbe-django/frontend/pages/sign-in.js\",\n                            lineNumber: 188,\n                            columnNumber: 29\n                        }, this)\n                    }, void 0, false, {\n                        fileName: \"/home/meno/Dev/Blockchain/UrbE/urbe-django/frontend/pages/sign-in.js\",\n                        lineNumber: 186,\n                        columnNumber: 21\n                    }, this)\n                ]\n            }, void 0, true, {\n                fileName: \"/home/meno/Dev/Blockchain/UrbE/urbe-django/frontend/pages/sign-in.js\",\n                lineNumber: 70,\n                columnNumber: 17\n            }, this)\n        }, void 0, false, {\n            fileName: \"/home/meno/Dev/Blockchain/UrbE/urbe-django/frontend/pages/sign-in.js\",\n            lineNumber: 69,\n            columnNumber: 13\n        }, this)\n    }, void 0, false, {\n        fileName: \"/home/meno/Dev/Blockchain/UrbE/urbe-django/frontend/pages/sign-in.js\",\n        lineNumber: 68,\n        columnNumber: 9\n    }, this);\n};\n\n__webpack_async_result__();\n} catch(e) { __webpack_async_result__(e); } });//# sourceURL=[module]\n//# sourceMappingURL=data:application/json;charset=utf-8;base64,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QUFLLENBQUNpQyxNQUFNLEdBQUcsQ0FBQyxrQkFDdEIsOERBQUNGLEtBQUc7NEJBQUNDLFNBQVMsRUFBQyxtQkFBbUI7O2dDQUFDLElBQUU7Z0NBQUNoQyxNQUFLOzs7Ozs7Z0NBQU87Ozs7OzRCQUVwRDs7Ozs7O29CQUNKOzs7OztnQkFDSjs7Ozs7WUFDSixDQUNUO0NBQ0oiLCJzb3VyY2VzIjpbIndlYnBhY2s6Ly91cmJlLWF1Y3Rpb24tbmV4dGpzLy4vcGFnZXMvc2lnbi1pbi5qcz9lNWQ5Il0sInNvdXJjZXNDb250ZW50IjpbImltcG9ydCB7IHVzZUZvcm0gfSBmcm9tIFwicmVhY3QtaG9vay1mb3JtXCJcbmltcG9ydCBheGlvcyBmcm9tIFwiYXhpb3NcIlxuaW1wb3J0IGJjcnlwdCBmcm9tIFwiYmNyeXB0anNcIlxuaW1wb3J0IHsgdXNlUm91dGVyIH0gZnJvbSBcIm5leHQvcm91dGVyXCJcbmltcG9ydCBxdWVyeXN0cmluZyBmcm9tIFwicXVlcnlzdHJpbmdcIlxuaW1wb3J0IHsgdXNlU3RhdGUsIHVzZUVmZmVjdCwgdXNlQ29udGV4dCB9IGZyb20gXCJyZWFjdFwiXG5pbXBvcnQgQ29va2llcyBmcm9tIFwianMtY29va2llXCJcbmltcG9ydCB7IEdsb2JhbFN0YXRlQ29udGV4dCB9IGZyb20gXCIuLi91dGlscy9HbG9iYWxTdGF0ZUNvbnRleHRcIlxuXG5leHBvcnQgZGVmYXVsdCBmdW5jdGlvbiBTaWduSW4oKSB7XG4gICAgY29uc3Qgcm91dGVyID0gdXNlUm91dGVyKClcbiAgICBjb25zdCBjc3JmVG9rZW4gPSBDb29raWVzLmdldChcImNzcmZ0b2tlblwiKVxuICAgIGNvbnN0IHsgZ2xvYmFsU3RhdGUsIHNldEdsb2JhbFN0YXRlIH0gPSB1c2VDb250ZXh0KEdsb2JhbFN0YXRlQ29udGV4dClcblxuICAgIGNvbnN0IFttZXNzYWdlLCBzZXRNZXNzYWdlXSA9IHVzZVN0YXRlKFwiXCIpXG4gICAgY29uc3QgW2Vycm9yLCBzZXRFcnJvcl0gPSB1c2VTdGF0ZShcIlwiKVxuICAgIGNvbnN0IFtzaG93UGFzc3dvcmQsIHNldFNob3dQYXNzd29yZF0gPSB1c2VTdGF0ZShmYWxzZSlcblxuICAgIHVzZUVmZmVjdCgoKSA9PiB7XG4gICAgICAgIHNldE1lc3NhZ2UocXVlcnlzdHJpbmcucGFyc2Uocm91dGVyLmFzUGF0aC5zcGxpdCgvXFw/LylbMV0pLm1lc3NhZ2UpXG4gICAgfSwgW3JvdXRlci5hc1BhdGhdKVxuXG4gICAgY29uc3Qge1xuICAgICAgICByZWdpc3RlcixcbiAgICAgICAgaGFuZGxlU3VibWl0LFxuICAgICAgICBmb3JtU3RhdGU6IHsgZXJyb3JzIH0sXG4gICAgfSA9IHVzZUZvcm0oKVxuXG4gICAgY29uc3Qgb25TdWJtaXQgPSBhc3luYyAoZGF0YSkgPT4ge1xuICAgICAgICBjb25zdCB1c2VybmFtZSA9IGRhdGEudXNlcm5hbWVcbiAgICAgICAgY29uc3QgcGFzc3dvcmQgPSBkYXRhLnBhc3N3b3JkXG4gICAgICAgIHNldEdsb2JhbFN0YXRlKHsgLi4uZ2xvYmFsU3RhdGUsIGlzU3RhZmY6IGZhbHNlLCB1c2VybmFtZTogdXNlcm5hbWUgfSlcblxuICAgICAgICBjb25zdCBmb3JtRGF0YSA9IG5ldyBGb3JtRGF0YSgpXG4gICAgICAgIGZvcm1EYXRhLmFwcGVuZChcInVzZXJuYW1lXCIsIHVzZXJuYW1lKVxuICAgICAgICBmb3JtRGF0YS5hcHBlbmQoXCJwYXNzd29yZFwiLCBwYXNzd29yZClcblxuICAgICAgICB0cnkge1xuICAgICAgICAgICAgY29uc3QgcmVzcG9uc2UgPSBhd2FpdCBheGlvcy5wb3N0KFwiaHR0cDovL2xvY2FsaG9zdDo4MDAwL3NpZ24taW5cIiwgZm9ybURhdGEsIHtcbiAgICAgICAgICAgICAgICBoZWFkZXJzOiB7XG4gICAgICAgICAgICAgICAgICAgIFwiQ29udGVudC1UeXBlXCI6IFwibXVsdGlwYXJ0L2Zvcm0tZGF0YVwiLFxuICAgICAgICAgICAgICAgICAgICBcIlgtQ1NSRlRva2VuXCI6IENvb2tpZXMuZ2V0KFwiY3NyZnRva2VuXCIpLFxuICAgICAgICAgICAgICAgIH0sXG4gICAgICAgICAgICB9KVxuXG4gICAgICAgICAgICBpZiAocmVzcG9uc2UuZGF0YS5zdWNjZXNzKSB7XG4gICAgICAgICAgICAgICAgY29uc3QgaXNVc2VyU3RhZmYgPSByZXNwb25zZS5kYXRhLmlzU3RhZmZcbiAgICAgICAgICAgICAgICBpZiAoaXNVc2VyU3RhZmYpIHtcbiAgICAgICAgICAgICAgICAgICAgc2V0R2xvYmFsU3RhdGUoeyAuLi5nbG9iYWxTdGF0ZSwgaXNTdGFmZjogdHJ1ZSwgdXNlcm5hbWU6IHVzZXJuYW1lIH0pXG4gICAgICAgICAgICAgICAgfVxuXG4gICAgICAgICAgICAgICAgcm91dGVyLnB1c2goXCIvXCIpXG4gICAgICAgICAgICB9IGVsc2Uge1xuICAgICAgICAgICAgICAgIGxldCBlcnJvck1lc3NhZ2UgPSByZXNwb25zZS5kYXRhLm1lc3NhZ2VzWzBdLm1lc3NhZ2VcbiAgICAgICAgICAgICAgICBzZXRFcnJvcihlcnJvck1lc3NhZ2UpXG4gICAgICAgICAgICAgICAgY29uc29sZS5sb2coXCJXcm9uZyB1c2VybmFtZSBvciBwYXNzd29yZC5cIilcbiAgICAgICAgICAgIH1cbiAgICAgICAgfSBjYXRjaCAoZXJyb3IpIHtcbiAgICAgICAgICAgIGNvbnNvbGUuZXJyb3IoZXJyb3IpXG4gICAgICAgIH1cbiAgICB9XG5cbiAgICBjb25zdCB0b2dnbGVTaG93UGFzc3dvcmQgPSAoKSA9PiB7XG4gICAgICAgIHNldFNob3dQYXNzd29yZCgocHJldlN0YXRlKSA9PiAhcHJldlN0YXRlKVxuICAgIH1cblxuICAgIHJldHVybiAoXG4gICAgICAgIDxkaXYgY2xhc3NOYW1lPVwidy1bMTAwJV0gaC1bMTAwdmhdIGZsZXggZmxleC1jb2xcIj5cbiAgICAgICAgICAgIDxkaXYgY2xhc3NOYW1lPVwiaC1bMTAwJV0gZmxleCBmbGV4LWNvbCBqdXN0aWZ5LWNlbnRlciBpdGVtcy1jZW50ZXJcIj5cbiAgICAgICAgICAgICAgICA8ZGl2PlxuICAgICAgICAgICAgICAgICAgICA8ZGl2PlxuICAgICAgICAgICAgICAgICAgICAgICAge21lc3NhZ2UgJiYgbWVzc2FnZS5sZW5ndGggPiAwICYmIChcbiAgICAgICAgICAgICAgICAgICAgICAgICAgICA8ZGl2IGNsYXNzTmFtZT1cInRleHQtZ3JlZW4tNjAwIG1iLTNcIj57bWVzc2FnZX08L2Rpdj5cbiAgICAgICAgICAgICAgICAgICAgICAgICl9XG4gICAgICAgICAgICAgICAgICAgIDwvZGl2PlxuICAgICAgICAgICAgICAgICAgICA8Zm9ybVxuICAgICAgICAgICAgICAgICAgICAgICAgb25TdWJtaXQ9e2hhbmRsZVN1Ym1pdChvblN1Ym1pdCl9XG4gICAgICAgICAgICAgICAgICAgICAgICBjbGFzc05hbWU9XCJ3LVszNjBweF0gcC00IHRyYW5zaXRpb24gZHVyYXRpb24tNzAwIHRleHQtZ3JheS05MDAgZGFyazp0ZXh0LWdyYXktNDAwIGJvcmRlci00IGJvcmRlci1zb2xpZCBib3JkZXItZ3JlZW4tNjAwIHJvdW5kZWQtMnhsIGJnLXdoaXRlIGJnLW9wYWNpdHktMjUgZGFyazpiZy1zbGF0ZS05MDAgZGFyazpiZy1vcGFjaXR5LTIwIGJhY2tkcm9wLWJsdXItbWRcIlxuICAgICAgICAgICAgICAgICAgICA+XG4gICAgICAgICAgICAgICAgICAgICAgICA8cCBjbGFzc05hbWU9XCJ0ZXh0LXhsIHRleHQtc2xhdGUtNTAwIGRhcms6dGV4dC1zbGF0ZS00MDAgbXQtMlwiPlNpZ24gSW4hPC9wPlxuICAgICAgICAgICAgICAgICAgICAgICAgPGRpdiBjbGFzc05hbWU9XCJyZWxhdGl2ZSBmb3JtLWdyb3VwIG15LTdcIj5cbiAgICAgICAgICAgICAgICAgICAgICAgICAgICA8aW5wdXRcbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgdHlwZT1cInRleHRcIlxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBpZD1cInVzZXJuYW1lXCJcbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgcGxhY2Vob2xkZXI9XCIgXCJcbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgY2xhc3NOYW1lPXtgcm91bmRlZC0yeGwgdy1bMTAwJV0gYmctdHJhbnNwYXJlbnQgYm9yZGVyIGhvdmVyOmJvcmRlci1za3ktNjAwIHRyYW5zaXRpb24gZHVyYXRpb24tNTAwIHAtMiBweC00IGZvcm0tY29udHJvbCBmb2N1czpvdXRsaW5lLW5vbmUgZm9jdXM6cmluZy0wIGZvY3VzOmJvcmRlci1za3ktNjAwIHBlZXIgYXV0b2ZpbGw6YmctdHJhbnNwYXJlbnQgJHtcbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIGVycm9ycy51c2VybmFtZSA/IFwiaXMtaW52YWxpZCBib3JkZXItcmVkLTUwMFwiIDogXCJcIlxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICB9YH1cbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgey4uLnJlZ2lzdGVyKFwidXNlcm5hbWVcIiwgeyByZXF1aXJlZDogdHJ1ZSB9KX1cbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAvPlxuICAgICAgICAgICAgICAgICAgICAgICAgICAgIHtlcnJvcnMudXNlcm5hbWUgJiYgKFxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICA8c3Ryb25nIGNsYXNzTmFtZT1cImludmFsaWQtZmVlZGJhY2sgdGV4dC1yZWQtNTAwIG1sLTUgdGV4dC1bMTJweF0gZm9udC1zYW5zIGZvbnQtbWVkaXVtXCI+XG4gICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBUaGlzIGZpZWxkIGlzIHJlcXVpcmVkXG4gICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIDwvc3Ryb25nPlxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICl9XG4gICAgICAgICAgICAgICAgICAgICAgICAgICAgPGxhYmVsXG4gICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIGh0bWxGb3I9XCJ1c2VybmFtZVwiXG4gICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIGNsYXNzTmFtZT17YGFic29sdXRlIGxlZnQtMyB0b3AtMSB0ZXh0LWdyYXktOTAwIGRhcms6dGV4dC1ncmF5LTQwMCB0cmFuc2l0aW9uIGR1cmF0aW9uLTUwMCB0cmFuc2Zvcm0gLXRyYW5zbGF0ZS15LTQgc2NhbGUtNzUgei0xMCBvcmlnaW4tWzBdIGJnLXdoaXRlIGRhcms6Ymctc2xhdGUtODAwIHB4LTIgcGVlci1mb2N1czpweC0yIHBlZXItcGxhY2Vob2xkZXItc2hvd246c2NhbGUtMTAwIHBlZXItcGxhY2Vob2xkZXItc2hvd246LXRyYW5zbGF0ZS15LTEvMiBwZWVyLXBsYWNlaG9sZGVyLXNob3duOnRvcC01IHBlZXItZm9jdXM6dG9wLTAgcGVlci1mb2N1czpsZWZ0LTMgcGVlci1mb2N1czpzY2FsZS03NSBwZWVyLWZvY3VzOi10cmFuc2xhdGUteS00ICR7XG4gICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBlcnJvcnMudXNlcm5hbWUgPyBcImlzLWludmFsaWRcIiA6IFwiXCJcbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgfWB9XG4gICAgICAgICAgICAgICAgICAgICAgICAgICAgPlxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBVc2VybmFtZSpcbiAgICAgICAgICAgICAgICAgICAgICAgICAgICA8L2xhYmVsPlxuICAgICAgICAgICAgICAgICAgICAgICAgPC9kaXY+XG4gICAgICAgICAgICAgICAgICAgICAgICA8ZGl2IGNsYXNzTmFtZT1cInJlbGF0aXZlIGZvcm0tZ3JvdXAgbXktN1wiPlxuICAgICAgICAgICAgICAgICAgICAgICAgICAgIDxpbnB1dFxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICB0eXBlPXtzaG93UGFzc3dvcmQgPyBcInRleHRcIiA6IFwicGFzc3dvcmRcIn1cbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgaWQ9XCJwYXNzd29yZFwiXG4gICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIHBsYWNlaG9sZGVyPVwiIFwiXG4gICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIGNsYXNzTmFtZT17YHJvdW5kZWQtMnhsIHctWzEwMCVdIGJnLXRyYW5zcGFyZW50IGJvcmRlciBob3Zlcjpib3JkZXItc2t5LTYwMCB0cmFuc2l0aW9uIGR1cmF0aW9uLTUwMCBwLTIgcHgtNCBmb3JtLWNvbnRyb2wgZm9jdXM6b3V0bGluZS1ub25lIGZvY3VzOnJpbmctMCBmb2N1czpib3JkZXItc2t5LTYwMCBwZWVyICR7XG4gICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBlcnJvcnMucGFzc3dvcmQgPyBcImlzLWludmFsaWQgYm9yZGVyLXJlZC01MDBcIiA6IFwiXCJcbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgfWB9XG4gICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIHsuLi5yZWdpc3RlcihcInBhc3N3b3JkXCIsIHsgcmVxdWlyZWQ6IHRydWUgfSl9XG4gICAgICAgICAgICAgICAgICAgICAgICAgICAgLz5cbiAgICAgICAgICAgICAgICAgICAgICAgICAgICA8YnV0dG9uXG4gICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIHR5cGU9XCJidXR0b25cIlxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBjbGFzc05hbWU9XCJhYnNvbHV0ZSB0b3AtMiByaWdodC01IHRleHQtZ3JheS05MDAgZGFyazp0ZXh0LWdyYXktNDAwIGhvdmVyOnRleHQtc2t5LTYwMCB0cmFuc2l0aW9uIGR1cmF0aW9uLTUwMFwiXG4gICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIG9uQ2xpY2s9e3RvZ2dsZVNob3dQYXNzd29yZH1cbiAgICAgICAgICAgICAgICAgICAgICAgICAgICA+XG4gICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIHtzaG93UGFzc3dvcmQgPyAoXG4gICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICA8c3ZnXG4gICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgeG1sbnM9XCJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2Z1wiXG4gICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgZmlsbD1cIm5vbmVcIlxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIHZpZXdCb3g9XCIwIDAgMjQgMjRcIlxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIHN0cm9rZVdpZHRoPVwiMS41XCJcbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBzdHJva2U9XCJjdXJyZW50Q29sb3JcIlxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIGNsYXNzTmFtZT1cInctNiBoLTZcIlxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgPlxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIDxwYXRoXG4gICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIHN0cm9rZUxpbmVjYXA9XCJyb3VuZFwiXG4gICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIHN0cm9rZUxpbmVqb2luPVwicm91bmRcIlxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBkPVwiTTMuOTggOC4yMjNBMTAuNDc3IDEwLjQ3NyAwIDAwMS45MzQgMTJDMy4yMjYgMTYuMzM4IDcuMjQ0IDE5LjUgMTIgMTkuNWMuOTkzIDAgMS45NTMtLjEzOCAyLjg2My0uMzk1TTYuMjI4IDYuMjI4QTEwLjQ1IDEwLjQ1IDAgMDExMiA0LjVjNC43NTYgMCA4Ljc3MyAzLjE2MiAxMC4wNjUgNy40OThhMTAuNTIzIDEwLjUyMyAwIDAxLTQuMjkzIDUuNzc0TTYuMjI4IDYuMjI4TDMgM20zLjIyOCAzLjIyOGwzLjY1IDMuNjVtNy44OTQgNy44OTRMMjEgMjFtLTMuMjI4LTMuMjI4bC0zLjY1LTMuNjVtMCAwYTMgMyAwIDEwLTQuMjQzLTQuMjQzbTQuMjQyIDQuMjQyTDkuODggOS44OFwiXG4gICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgLz5cbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIDwvc3ZnPlxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICApIDogKFxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgPHN2Z1xuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIHhtbG5zPVwiaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmdcIlxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIGZpbGw9XCJub25lXCJcbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICB2aWV3Qm94PVwiMCAwIDI0IDI0XCJcbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBzdHJva2VXaWR0aD1cIjEuNVwiXG4gICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgc3Ryb2tlPVwiY3VycmVudENvbG9yXCJcbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBjbGFzc05hbWU9XCJ3LTYgaC02XCJcbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgID5cbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICA8cGF0aFxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBzdHJva2VMaW5lY2FwPVwicm91bmRcIlxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBzdHJva2VMaW5lam9pbj1cInJvdW5kXCJcbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgZD1cIk0yLjAzNiAxMi4zMjJhMS4wMTIgMS4wMTIgMCAwMTAtLjYzOUMzLjQyMyA3LjUxIDcuMzYgNC41IDEyIDQuNWM0LjYzOCAwIDguNTczIDMuMDA3IDkuOTYzIDcuMTc4LjA3LjIwNy4wNy40MzEgMCAuNjM5QzIwLjU3NyAxNi40OSAxNi42NCAxOS41IDEyIDE5LjVjLTQuNjM4IDAtOC41NzMtMy4wMDctOS45NjMtNy4xNzh6XCJcbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAvPlxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIDxwYXRoXG4gICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIHN0cm9rZUxpbmVjYXA9XCJyb3VuZFwiXG4gICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIHN0cm9rZUxpbmVqb2luPVwicm91bmRcIlxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBkPVwiTTE1IDEyYTMgMyAwIDExLTYgMCAzIDMgMCAwMTYgMHpcIlxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIC8+XG4gICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICA8L3N2Zz5cbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgKX1cbiAgICAgICAgICAgICAgICAgICAgICAgICAgICA8L2J1dHRvbj5cbiAgICAgICAgICAgICAgICAgICAgICAgICAgICB7ZXJyb3JzLnBhc3N3b3JkICYmIChcbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgPHN0cm9uZyBjbGFzc05hbWU9XCJpbnZhbGlkLWZlZWRiYWNrIHRleHQtcmVkLTUwMCBtbC01IHRleHQtWzEycHhdIGZvbnQtc2FucyBmb250LW1lZGl1bVwiPlxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgVGhpcyBmaWVsZCBpcyByZXF1aXJlZFxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICA8L3N0cm9uZz5cbiAgICAgICAgICAgICAgICAgICAgICAgICAgICApfVxuICAgICAgICAgICAgICAgICAgICAgICAgICAgIDxsYWJlbFxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBodG1sRm9yPVwicGFzc3dvcmRcIlxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBjbGFzc05hbWU9e2BhYnNvbHV0ZSBsZWZ0LTMgdG9wLTEgdGV4dC1ncmF5LTkwMCBkYXJrOnRleHQtZ3JheS00MDAgdHJhbnNpdGlvbiBkdXJhdGlvbi01MDAgdHJhbnNmb3JtIC10cmFuc2xhdGUteS00IHNjYWxlLTc1IHotMTAgb3JpZ2luLVswXSBiZy13aGl0ZSBkYXJrOmJnLXNsYXRlLTgwMCBweC0yIHBlZXItZm9jdXM6cHgtMiBwZWVyLXBsYWNlaG9sZGVyLXNob3duOnNjYWxlLTEwMCBwZWVyLXBsYWNlaG9sZGVyLXNob3duOi10cmFuc2xhdGUteS0xLzIgcGVlci1wbGFjZWhvbGRlci1zaG93bjp0b3AtNSBwZWVyLWZvY3VzOnRvcC0wIHBlZXItZm9jdXM6bGVmdC0zIHBlZXItZm9jdXM6c2NhbGUtNzUgcGVlci1mb2N1czotdHJhbnNsYXRlLXktNCAgICR7XG4gICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBlcnJvcnMucGFzc3dvcmQgPyBcImlzLWludmFsaWRcIiA6IFwiXCJcbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgfWB9XG4gICAgICAgICAgICAgICAgICAgICAgICAgICAgPlxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBQYXNzd29yZCpcbiAgICAgICAgICAgICAgICAgICAgICAgICAgICA8L2xhYmVsPlxuICAgICAgICAgICAgICAgICAgICAgICAgPC9kaXY+XG4gICAgICAgICAgICAgICAgICAgICAgICA8YnV0dG9uXG4gICAgICAgICAgICAgICAgICAgICAgICAgICAgdHlwZT1cInN1Ym1pdFwiXG4gICAgICAgICAgICAgICAgICAgICAgICAgICAgY2xhc3NOYW1lPVwiYnRuIGJ0bi1vdXRsaW5lLXByaW1hcnkgcHgtMyBweS0xIHJvdW5kZWQteGwgYm9yZGVyLTIgZm9udC1zZW1pYm9sZCB0ZXh0LVsxNHB4XSBob3ZlcjpzY2FsZS0xMjUgdHJhbnNpdGlvbiBlYXNlLW91dCBkdXJhdGlvbi01MDAgYm9yZGVyLWdyZWVuLTYwMCBkYXJrOmJnLWdyZWVuLTYwMCB0ZXh0LXNsYXRlLTgwMFwiXG4gICAgICAgICAgICAgICAgICAgICAgICA+XG4gICAgICAgICAgICAgICAgICAgICAgICAgICAgU3VibWl0XG4gICAgICAgICAgICAgICAgICAgICAgICA8L2J1dHRvbj5cbiAgICAgICAgICAgICAgICAgICAgPC9mb3JtPlxuICAgICAgICAgICAgICAgICAgICA8ZGl2IGNsYXNzTmFtZT1cImZsZXggbXQtMyBzZWxmLXN0YXJ0XCI+XG4gICAgICAgICAgICAgICAgICAgICAgICA8ZGl2PkRvbid0IGhhdmUgYW4gYWNjb3VudCB5ZXQ/IDwvZGl2PlxuICAgICAgICAgICAgICAgICAgICAgICAgPGRpdiBjbGFzc05hbWU9XCJtbC0yIGhvdmVyOnNjYWxlLTEyNVwiPlxuICAgICAgICAgICAgICAgICAgICAgICAgICAgIDxhIGhyZWY9XCIvc2lnbi11cFwiIGNsYXNzTmFtZT1cImN1cnNvci1wb2ludGVyIHRleHQtZ3JlZW4tNjAwIFwiPlxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBTaWduIFVwIVxuICAgICAgICAgICAgICAgICAgICAgICAgICAgIDwvYT5cbiAgICAgICAgICAgICAgICAgICAgICAgIDwvZGl2PlxuICAgICAgICAgICAgICAgICAgICA8L2Rpdj5cbiAgICAgICAgICAgICAgICAgICAgPGRpdj5cbiAgICAgICAgICAgICAgICAgICAgICAgIHtlcnJvciAmJiBlcnJvci5sZW5ndGggPiAwICYmIChcbiAgICAgICAgICAgICAgICAgICAgICAgICAgICA8ZGl2IGNsYXNzTmFtZT1cIm10LTMgdGV4dC1yZWQtNTAwXCI+LSB7ZXJyb3J9PC9kaXY+XG4gICAgICAgICAgICAgICAgICAgICAgICApfVxuICAgICAgICAgICAgICAgICAgICA8L2Rpdj5cbiAgICAgICAgICAgICAgICA8L2Rpdj5cbiAgICAgICAgICAgIDwvZGl2PlxuICAgICAgICA8L2Rpdj5cbiAgICApXG59XG4iXSwibmFtZXMiOlsidXNlRm9ybSIsImF4aW9zIiwiYmNyeXB0IiwidXNlUm91dGVyIiwicXVlcnlzdHJpbmciLCJ1c2VTdGF0ZSIsInVzZUVmZmVjdCIsInVzZUNvbnRleHQiLCJDb29raWVzIiwiR2xvYmFsU3RhdGVDb250ZXh0IiwiU2lnbkluIiwicm91dGVyIiwiY3NyZlRva2VuIiwiZ2V0IiwiZ2xvYmFsU3RhdGUiLCJzZXRHbG9iYWxTdGF0ZSIsIm1lc3NhZ2UiLCJzZXRNZXNzYWdlIiwiZXJyb3IiLCJzZXRFcnJvciIsInNob3dQYXNzd29yZCIsInNldFNob3dQYXNzd29yZCIsInBhcnNlIiwiYXNQYXRoIiwic3BsaXQiLCJyZWdpc3RlciIsImhhbmRsZVN1Ym1pdCIsImZvcm1TdGF0ZSIsImVycm9ycyIsIm9uU3VibWl0IiwiZGF0YSIsInVzZXJuYW1lIiwicGFzc3dvcmQiLCJpc1N0YWZmIiwiZm9ybURhdGEiLCJGb3JtRGF0YSIsImFwcGVuZCIsInJlc3BvbnNlIiwicG9zdCIsImhlYWRlcnMiLCJzdWNjZXNzIiwiaXNVc2VyU3RhZmYiLCJwdXNoIiwiZXJyb3JNZXNzYWdlIiwibWVzc2FnZXMiLCJjb25zb2xlIiwibG9nIiwidG9nZ2xlU2hvd1Bhc3N3b3JkIiwicHJldlN0YXRlIiwiZGl2IiwiY2xhc3NOYW1lIiwibGVuZ3RoIiwiZm9ybSIsInAiLCJpbnB1dCIsInR5cGUiLCJpZCIsInBsYWNlaG9sZGVyIiwicmVxdWlyZWQiLCJzdHJvbmciLCJsYWJlbCIsImh0bWxGb3IiLCJidXR0b24iLCJvbkNsaWNrIiwic3ZnIiwieG1sbnMiLCJmaWxsIiwidmlld0JveCIsInN0cm9rZVdpZHRoIiwic3Ryb2tlIiwicGF0aCIsInN0cm9rZUxpbmVjYXAiLCJzdHJva2VMaW5lam9pbiIsImQiLCJhIiwiaHJlZiJdLCJzb3VyY2VSb290IjoiIn0=\n//# sourceURL=webpack-internal:///./pages/sign-in.js\n");
 
 /***/ }),
 
-/***/ 6162:
+/***/ "./utils/GlobalStateContext.js":
+/*!*************************************!*\
+  !*** ./utils/GlobalStateContext.js ***!
+  \*************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "M": () => (/* binding */ GlobalStateProvider),
-/* harmony export */   "P": () => (/* binding */ GlobalStateContext)
-/* harmony export */ });
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(997);
-/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(6689);
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_1__);
-
-
-
-const GlobalStateContext = /*#__PURE__*/ (0,react__WEBPACK_IMPORTED_MODULE_1__.createContext)();
-const GlobalStateProvider = ({ children  })=>{
-    const { 0: globalState , 1: setGlobalState  } = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)({
-        isStaff: false,
-        username: null,
-        checkIp: null
-    });
-    return /*#__PURE__*/ react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx(GlobalStateContext.Provider, {
-        value: {
-            globalState,
-            setGlobalState
-        },
-        children: children
-    });
-};
-
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   \"GlobalStateContext\": () => (/* binding */ GlobalStateContext),\n/* harmony export */   \"GlobalStateProvider\": () => (/* binding */ GlobalStateProvider)\n/* harmony export */ });\n/* harmony import */ var react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react/jsx-dev-runtime */ \"react/jsx-dev-runtime\");\n/* harmony import */ var react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__);\n/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react */ \"react\");\n/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_1__);\n\n\n\nconst GlobalStateContext = /*#__PURE__*/ (0,react__WEBPACK_IMPORTED_MODULE_1__.createContext)();\nconst GlobalStateProvider = ({ children  })=>{\n    const { 0: globalState , 1: setGlobalState  } = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)({\n        isStaff: false,\n        username: null,\n        checkIp: null\n    });\n    return /*#__PURE__*/ (0,react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxDEV)(GlobalStateContext.Provider, {\n        value: {\n            globalState,\n            setGlobalState\n        },\n        children: children\n    }, void 0, false, {\n        fileName: \"/home/meno/Dev/Blockchain/UrbE/urbe-django/frontend/utils/GlobalStateContext.js\",\n        lineNumber: 14,\n        columnNumber: 9\n    }, undefined);\n};\n//# sourceURL=[module]\n//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiLi91dGlscy9HbG9iYWxTdGF0ZUNvbnRleHQuanMuanMiLCJtYXBwaW5ncyI6Ijs7Ozs7Ozs7O0FBQUE7QUFBcUM7QUFDTDtBQUV6QixNQUFNRSxrQkFBa0IsaUJBQUdGLG9EQUFhLEVBQUU7QUFFMUMsTUFBTUcsbUJBQW1CLEdBQUcsQ0FBQyxFQUFFQyxRQUFRLEdBQUUsR0FBSztJQUNqRCxNQUFNLEVBTlYsR0FNV0MsV0FBVyxHQU50QixHQU13QkMsY0FBYyxNQUFJTCwrQ0FBUSxDQUFDO1FBQzNDTSxPQUFPLEVBQUUsS0FBSztRQUNkQyxRQUFRLEVBQUUsSUFBSTtRQUNkQyxPQUFPLEVBQUUsSUFBSTtLQUNoQixDQUFDO0lBRUYscUJBQ0ksOERBQUNQLGtCQUFrQixDQUFDUSxRQUFRO1FBQUNDLEtBQUssRUFBRTtZQUFFTixXQUFXO1lBQUVDLGNBQWM7U0FBRTtrQkFDOURGLFFBQVE7Ozs7O2lCQUNpQixDQUNqQztDQUNKIiwic291cmNlcyI6WyJ3ZWJwYWNrOi8vdXJiZS1hdWN0aW9uLW5leHRqcy8uL3V0aWxzL0dsb2JhbFN0YXRlQ29udGV4dC5qcz8wZmU0Il0sInNvdXJjZXNDb250ZW50IjpbImltcG9ydCB7IGNyZWF0ZUNvbnRleHQgfSBmcm9tIFwicmVhY3RcIlxuaW1wb3J0IHsgdXNlU3RhdGUgfSBmcm9tIFwicmVhY3RcIlxuXG5leHBvcnQgY29uc3QgR2xvYmFsU3RhdGVDb250ZXh0ID0gY3JlYXRlQ29udGV4dCgpXG5cbmV4cG9ydCBjb25zdCBHbG9iYWxTdGF0ZVByb3ZpZGVyID0gKHsgY2hpbGRyZW4gfSkgPT4ge1xuICAgIGNvbnN0IFtnbG9iYWxTdGF0ZSwgc2V0R2xvYmFsU3RhdGVdID0gdXNlU3RhdGUoe1xuICAgICAgICBpc1N0YWZmOiBmYWxzZSxcbiAgICAgICAgdXNlcm5hbWU6IG51bGwsXG4gICAgICAgIGNoZWNrSXA6IG51bGwsXG4gICAgfSlcblxuICAgIHJldHVybiAoXG4gICAgICAgIDxHbG9iYWxTdGF0ZUNvbnRleHQuUHJvdmlkZXIgdmFsdWU9e3sgZ2xvYmFsU3RhdGUsIHNldEdsb2JhbFN0YXRlIH19PlxuICAgICAgICAgICAge2NoaWxkcmVufVxuICAgICAgICA8L0dsb2JhbFN0YXRlQ29udGV4dC5Qcm92aWRlcj5cbiAgICApXG59XG4iXSwibmFtZXMiOlsiY3JlYXRlQ29udGV4dCIsInVzZVN0YXRlIiwiR2xvYmFsU3RhdGVDb250ZXh0IiwiR2xvYmFsU3RhdGVQcm92aWRlciIsImNoaWxkcmVuIiwiZ2xvYmFsU3RhdGUiLCJzZXRHbG9iYWxTdGF0ZSIsImlzU3RhZmYiLCJ1c2VybmFtZSIsImNoZWNrSXAiLCJQcm92aWRlciIsInZhbHVlIl0sInNvdXJjZVJvb3QiOiIifQ==\n//# sourceURL=webpack-internal:///./utils/GlobalStateContext.js\n");
 
 /***/ }),
 
-/***/ 8432:
+/***/ "bcryptjs":
+/*!***************************!*\
+  !*** external "bcryptjs" ***!
+  \***************************/
 /***/ ((module) => {
 
 module.exports = require("bcryptjs");
 
 /***/ }),
 
-/***/ 1853:
+/***/ "next/router":
+/*!******************************!*\
+  !*** external "next/router" ***!
+  \******************************/
 /***/ ((module) => {
 
 module.exports = require("next/router");
 
 /***/ }),
 
-/***/ 9819:
+/***/ "querystring":
+/*!******************************!*\
+  !*** external "querystring" ***!
+  \******************************/
 /***/ ((module) => {
 
 module.exports = require("querystring");
 
 /***/ }),
 
-/***/ 6689:
+/***/ "react":
+/*!************************!*\
+  !*** external "react" ***!
+  \************************/
 /***/ ((module) => {
 
 module.exports = require("react");
 
 /***/ }),
 
-/***/ 997:
+/***/ "react/jsx-dev-runtime":
+/*!****************************************!*\
+  !*** external "react/jsx-dev-runtime" ***!
+  \****************************************/
 /***/ ((module) => {
 
-module.exports = require("react/jsx-runtime");
+module.exports = require("react/jsx-dev-runtime");
 
 /***/ }),
 
-/***/ 9648:
+/***/ "axios":
+/*!************************!*\
+  !*** external "axios" ***!
+  \************************/
 /***/ ((module) => {
 
 module.exports = import("axios");;
 
 /***/ }),
 
-/***/ 9915:
+/***/ "js-cookie":
+/*!****************************!*\
+  !*** external "js-cookie" ***!
+  \****************************/
 /***/ ((module) => {
 
 module.exports = import("js-cookie");;
 
 /***/ }),
 
-/***/ 5641:
+/***/ "react-hook-form":
+/*!**********************************!*\
+  !*** external "react-hook-form" ***!
+  \**********************************/
 /***/ ((module) => {
 
 module.exports = import("react-hook-form");;
@@ -334,7 +120,7 @@ module.exports = import("react-hook-form");;
 var __webpack_require__ = require("../webpack-runtime.js");
 __webpack_require__.C(exports);
 var __webpack_exec__ = (moduleId) => (__webpack_require__(__webpack_require__.s = moduleId))
-var __webpack_exports__ = (__webpack_exec__(938));
+var __webpack_exports__ = (__webpack_exec__("./pages/sign-in.js"));
 module.exports = __webpack_exports__;
 
 })();

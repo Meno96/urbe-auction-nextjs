@@ -28,11 +28,12 @@ export default function Header(props) {
     useEffect(() => {
         setUsername(globalState.username)
         setIsStaff(globalState.isStaff)
+        // console.log(globalState.isStaff)
     }, [globalState.username, globalState.isStaff])
 
     async function handleLogout() {
         try {
-            await axios.post("/logout")
+            await axios.post("http://localhost:8000/logout")
             router.push("/sign-in")
         } catch (error) {
             console.error(error)

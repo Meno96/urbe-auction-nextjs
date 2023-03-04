@@ -3,6 +3,7 @@ import axios from "axios"
 import { useRouter } from "next/router"
 import { useState } from "react"
 import Cookies from "js-cookie"
+import cookie from "react-cookies"
 
 export default function SignIn() {
     const router = useRouter()
@@ -34,8 +35,10 @@ export default function SignIn() {
             formData.append("password1", password1)
             formData.append("password2", password2)
 
+            console.log(csrfToken)
+
             try {
-                const response = await axios.post("/sign-up", formData, {
+                const response = await axios.post("http://localhost:8000/sign-up", formData, {
                     headers: {
                         "Content-Type": "multipart/form-data",
                         "X-CSRFToken": csrfToken,

@@ -36,10 +36,10 @@ export default function SignIn() {
         formData.append("password", password)
 
         try {
-            const response = await axios.post("/sign-in", formData, {
+            const response = await axios.post("http://localhost:8000/sign-in", formData, {
                 headers: {
                     "Content-Type": "multipart/form-data",
-                    "X-CSRFToken": csrfToken,
+                    "X-CSRFToken": Cookies.get("csrftoken"),
                 },
             })
 
