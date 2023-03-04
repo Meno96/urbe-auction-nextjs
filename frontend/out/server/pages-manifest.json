@@ -1,0 +1,12 @@
+{
+  "/api/hello": "pages/api/hello.js",
+  "/account": "pages/account.js",
+  "/": "pages/index.js",
+  "/_app": "pages/_app.js",
+  "/sign-in": "pages/sign-in.js",
+  "/sell-nft": "pages/sell-nft.js",
+  "/add-nft": "pages/add-nft.js",
+  "/sign-up": "pages/sign-up.js",
+  "/_error": "pages/_error.js",
+  "/_document": "pages/_document.js"
+}
