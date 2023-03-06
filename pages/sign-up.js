@@ -3,7 +3,6 @@ import axios from "axios"
 import { useRouter } from "next/router"
 import { useState } from "react"
 import Cookies from "js-cookie"
-import cookie from "react-cookies"
 
 export default function SignIn() {
     const router = useRouter()
