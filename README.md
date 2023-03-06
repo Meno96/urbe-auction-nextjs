@@ -5,7 +5,7 @@
 <br/>
 
 <p align="center">
-<img src="./assets/GitHubImages/Admin-Homepage.png" width="80%" alt="UrbE Auction Homepage">
+<img src="./assets/GitHubImages/Admin-Homepage2.png" width="80%" alt="UrbE Auction Homepage">
 </a>
 </p>
 
@@ -129,7 +129,7 @@ The whole thing is based on two smart contracts (which can be seen in the Hardha
 ### Homepage
 
 <p align="center">
-    <img width="100%" src="./assets/GitHubImages/Admin-Homepage.png" alt="Homepage">
+    <img width="100%" src="./assets/GitHubImages/Admin-Homepage2.png" alt="Homepage">
 </p>
 
 When we log in we will be redirected to the homepage, where a warning will be shown if the IP address of the logged in admin user is different from the last one, detecting a possible intrusion by an attacker.
