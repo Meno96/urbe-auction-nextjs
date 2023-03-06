@@ -11,7 +11,7 @@ export default function FetchUserInfo(props) {
     useEffect(() => {
         async function fetchData() {
             try {
-                const response = await axios.get("http://localhost:8000/api/user-info/")
+                const response = await axios.get("/api/user-info/")
                 const userInfo = response.data
                 const isStaff = userInfo.isStaff
                 const username = userInfo.username

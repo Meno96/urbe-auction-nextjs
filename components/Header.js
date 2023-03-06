@@ -28,7 +28,7 @@ export default function Header(props) {
     async function handleLogout() {
         try {
             // Logout user and redirect to sign-in page
-            await axios.post("http://localhost:8000/logout")
+            await axios.post("/logout")
             router.push("/sign-in")
         } catch (error) {
             console.error(error)
