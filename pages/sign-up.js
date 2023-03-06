@@ -87,7 +87,7 @@ export default function SignIn() {
                     {/* Define signup form */}
                     <form
                         onSubmit={handleSubmit(onSubmit)}
-                        className="w-[360px] p-4 transition duration-700 text-gray-900 dark:text-gray-400 dark:bg-slate-800 border-4 border-solid border-green-600 rounded-2xl bg-white bg-opacity-25 dark:bg-slate-900 dark:bg-opacity-20 backdrop-blur-md"
+                        className="w-[360px] p-4 transition duration-700 text-gray-900 dark:text-gray-400 border-4 border-solid border-green-600 rounded-2xl bg-white bg-opacity-25 dark:bg-slate-900 dark:bg-opacity-20 backdrop-blur-md"
                     >
                         {/* Title */}
                         <p className="text-xl text-slate-500 dark:text-slate-400 mt-2">Sign Up!</p>
