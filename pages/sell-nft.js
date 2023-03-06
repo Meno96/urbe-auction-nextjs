@@ -42,7 +42,7 @@ export default function SellNft() {
         const price = data.data[1].inputResult
             ? ethers.utils.parseUnits(data.data[1].inputResult, "ether").toString()
             : "0"
-        const biddingTime = (data.data[2].inputResult * 3600).toString()
+        const biddingTime = data.data[2].inputResult.toString()
 
         // Get the next token ID to use
         const tokenId = await getTokenCounter()
