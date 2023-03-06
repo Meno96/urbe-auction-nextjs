@@ -5,7 +5,7 @@
 @layer base {
     body {
         @apply w-[100%];
-        @apply h-[100vh];
+        @apply h-[100%];
         @apply transition-all;
         @apply duration-500;
         @apply bg-[url('../public/next/BackgroundLight.png')];
