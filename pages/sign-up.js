@@ -7,28 +7,33 @@ import cookie from "react-cookies"
 
 export default function SignIn() {
     const router = useRouter()
-
     const csrfToken = Cookies.get("csrftoken")
 
+    // Initialize the React Hook Form
     const {
         register,
         handleSubmit,
         formState: { errors },
     } = useForm()
 
+    // Initialize state variables
     const [error, setErrors] = useState([])
     const [showPassword1, setShowPassword1] = useState(false)
     const [showPassword2, setShowPassword2] = useState(false)
 
+    // Define the function to be called when the form is submitted
     const onSubmit = async (data) => {
+        // Get the form data
         const username = data.username
         const email = data.email
         const password1 = data.password1
         const password2 = data.password2
 
+        // Check if the passwords match
         if (password1 !== password2) {
             setErrors(["The passwords do not match."])
         } else {
+            // Create a new FormData object to send the data to the server
             const formData = new FormData()
             formData.append("username", username)
             formData.append("email", email)
@@ -38,6 +43,7 @@ export default function SignIn() {
             console.log(csrfToken)
 
             try {
+                // Send the form data to the server
                 const response = await axios.post(
                     "https://urbe-auction.herokuapp.com/sign-up",
                     formData,
@@ -49,12 +55,14 @@ export default function SignIn() {
                     }
                 )
 
+                // If the server returns a success message, redirect to the sign-in page
                 if (response.data.success) {
                     router.push({
                         pathname: "/sign-in",
                         query: { message: `Account ${username} successfully created.` },
                     })
                 } else {
+                    // If there are errors, display them
                     let errorMessages = response.data.messages.map((message) => message.message)
                     setErrors(errorMessages)
                     console.log("Check that you have filled in all the required fields correctly.")
@@ -65,6 +73,7 @@ export default function SignIn() {
         }
     }
 
+    // Define the functions to toggle the password visibility
     const toggleShowPassword1 = () => {
         setShowPassword1((prevState) => !prevState)
     }
@@ -76,11 +85,14 @@ export default function SignIn() {
         <div className="w-[100%] h-[100vh] flex flex-col">
             <div className="h-[100%] flex flex-col justify-center items-center">
                 <div>
+                    {/* Define signup form */}
                     <form
                         onSubmit={handleSubmit(onSubmit)}
                         className="w-[360px] p-4 transition duration-700 text-gray-900 dark:text-gray-400 dark:bg-slate-800 border-4 border-solid border-green-600 rounded-2xl bg-white bg-opacity-25 dark:bg-slate-900 dark:bg-opacity-20 backdrop-blur-md"
                     >
+                        {/* Title */}
                         <p className="text-xl text-slate-500 dark:text-slate-400 mt-2">Sign Up!</p>
+                        {/* Username input */}
                         <div className="relative form-group my-7">
                             <input
                                 type="text"
@@ -91,11 +103,13 @@ export default function SignIn() {
                                 }`}
                                 {...register("username", { required: true })}
                             />
+                            {/* Username error message */}
                             {errors.username && (
                                 <strong className="invalid-feedback text-red-500 ml-5 text-[12px] font-sans font-medium">
                                     This field is required
                                 </strong>
                             )}
+                            {/* Username label */}
                             <label
                                 htmlFor="username"
                                 for="username"
@@ -106,6 +120,7 @@ export default function SignIn() {
                                 Username*
                             </label>
                         </div>
+                        {/* Email input */}
                         <div className="relative form-group my-7">
                             <input
                                 type="email"
@@ -116,11 +131,13 @@ export default function SignIn() {
                                 }`}
                                 {...register("email", { required: true })}
                             />
+                            {/* Email error message */}
                             {errors.email && (
                                 <strong className="invalid-feedback text-red-500 ml-5 text-[12px] font-sans font-medium">
                                     This field is required
                                 </strong>
                             )}
+                            {/* Email label */}
                             <label
                                 htmlFor="email"
                                 for="email"
@@ -131,6 +148,7 @@ export default function SignIn() {
                                 Email*
                             </label>
                         </div>
+                        {/* Password1 input */}
                         <div className="relative form-group my-7">
                             <input
                                 type={showPassword1 ? "text" : "password"}
@@ -141,6 +159,7 @@ export default function SignIn() {
                                 }`}
                                 {...register("password1", { required: true })}
                             />
+                            {/* Show/hide password1 button */}
                             <button
                                 type="button"
                                 className="absolute top-2 right-5 text-gray-900 dark:text-gray-400 hover:text-sky-600 transition duration-500"
@@ -183,11 +202,13 @@ export default function SignIn() {
                                     </svg>
                                 )}
                             </button>
+                            {/* Password1 error message */}
                             {errors.password1 && (
                                 <strong className="invalid-feedback text-red-500 ml-5 text-[12px] font-sans font-medium">
                                     This field is required
                                 </strong>
                             )}
+                            {/* Password1 label */}
                             <label
                                 htmlFor="password1"
                                 for="password1"
@@ -198,6 +219,7 @@ export default function SignIn() {
                                 Password*
                             </label>
                         </div>
+                        {/* Password2 input */}
                         <div className="relative form-group my-7">
                             <input
                                 type={showPassword2 ? "text" : "password"}
@@ -208,6 +230,7 @@ export default function SignIn() {
                                 }`}
                                 {...register("password2", { required: true })}
                             />
+                            {/* Show/hide password2 button */}
                             <button
                                 type="button"
                                 className="absolute top-2 right-5 text-gray-900 dark:text-gray-400 hover:text-sky-600 transition duration-500"
@@ -250,11 +273,13 @@ export default function SignIn() {
                                     </svg>
                                 )}
                             </button>
+                            {/* Password2 error message */}
                             {errors.password2 && (
                                 <strong className="invalid-feedback text-red-500 ml-5 text-[12px] font-sans font-medium">
                                     This field is required
                                 </strong>
                             )}
+                            {/* Password2 label */}
                             <label
                                 htmlFor="password2"
                                 for="password2"
@@ -265,6 +290,7 @@ export default function SignIn() {
                                 Password Confirmation*
                             </label>
                         </div>
+                        {/* Submit button */}
                         <button
                             type="submit"
                             className="btn btn-outline-primary px-3 py-1 rounded-xl border-2 font-semibold text-[14px] hover:scale-125 transition ease-out duration-500 border-green-600 dark:bg-green-600 text-slate-800"

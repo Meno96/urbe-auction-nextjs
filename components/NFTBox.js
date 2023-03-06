@@ -11,6 +11,7 @@ import { format, intervalToDuration } from "date-fns"
 import axios from "axios"
 import Cookies from "js-cookie"
 
+// Function to truncate a string and add the separator in the middle
 const truncateStr = (fullStr, strLen) => {
     if (fullStr.length <= strLen) return fullStr
 
@@ -26,8 +27,9 @@ const truncateStr = (fullStr, strLen) => {
     )
 }
 
+// Function to convert seconds into hours, minutes, and seconds format
 const toHHMMSS = (seconds) => {
-    var sec_num = seconds // don't forget the second param
+    var sec_num = seconds
     var hours = Math.floor(sec_num / 3600)
     var minutes = Math.floor((sec_num - hours * 3600) / 60)
     var seconds = sec_num - hours * 3600 - minutes * 60
@@ -48,16 +50,12 @@ export default function NFTBox({ price, nftAddress, tokenId, urbEAuctionAddress 
     const { isWeb3Enabled, account } = useMoralis()
     const [imageURI, setImageURI] = useState("")
     const [tokenName, setTokenName] = useState("")
-    const [tokenDescription, setTokenDescription] = useState("")
     const [highestBidder, setHighestBidder] = useState("")
     const [seller, setSeller] = useState("")
-    const [endTime, setEndTime] = useState("")
-    const [startTime, setStartTime] = useState("")
     const [isFlipped, setIsFlipped] = useState(false)
     const [timeRemaining, setTimeRemaining] = useState("")
     const [deployer, setDeployer] = useState(true)
     const [intervalId, setIntervalId] = useState(null)
-    const [data, setData] = useState(null)
     const [isTimeUp, setIsTimeUp] = useState(false)
     const [showModal, setShowModal] = useState(false)
     const hideModal = () => setShowModal(false)
@@ -102,6 +100,7 @@ export default function NFTBox({ price, nftAddress, tokenId, urbEAuctionAddress 
         },
     })
 
+    // Fetches tokenURI and updates the state of imageURI and tokenName
     async function updateUI() {
         const tokenURI = await getTokenURI()
         if (tokenURI) {
@@ -111,10 +110,10 @@ export default function NFTBox({ price, nftAddress, tokenId, urbEAuctionAddress 
             const imageURIURL = imageURI.replace("ipfs://", "https://ipfs.io/ipfs/")
             setImageURI(imageURIURL)
             setTokenName(tokenURIResponse.name)
-            setTokenDescription(tokenURIResponse.description)
         }
     }
 
+    // Runs updateUI and initializes the card with listedItem details
     useEffect(() => {
         if (isWeb3Enabled) {
             updateUI()
@@ -124,27 +123,33 @@ export default function NFTBox({ price, nftAddress, tokenId, urbEAuctionAddress 
     useEffect(() => {
         if (isWeb3Enabled) {
             async function initializeCard() {
+                // Retrieves information about the listing from the auction smart contract
                 const listedItem = await getListing(nftAddress, tokenId)
                 const endTime = listedItem.endTime
                 const highestBidder = listedItem.highestBidder
                 const seller = listedItem.seller
                 const deployer = await getDeployer()
+
+                // Sets the state with the retrieved values
                 setDeployer(deployer)
                 setHighestBidder(highestBidder)
                 setSeller(seller)
 
+                // Sets up the countdown timer for the auction
                 if (endTime != 0) {
                     setIntervalId(
                         setInterval(async () => {
-                            const currentTimestamp = Math.floor(Date.now() / 1000) // converti il timestamp corrente in secondi
-                            const timeRemainingInSeconds = endTime - currentTimestamp // calcola il tempo rimanente in secondi
-                            setTimeRemaining(timeRemainingInSeconds) // aggiorna lo stato del tempo rimanente
+                            // Calculates the remaining time until the end of the auction
+                            const currentTimestamp = Math.floor(Date.now() / 1000)
+                            const timeRemainingInSeconds = endTime - currentTimestamp
+                            setTimeRemaining(timeRemainingInSeconds)
 
+                            // Stops the timer when the auction has ended
                             if (timeRemainingInSeconds <= 0) {
                                 setTimeRemaining(0)
                                 clearInterval(intervalId)
                             }
-                        }, 1000) // aggiorna il timer ogni secondo
+                        }, 1000)
                     )
                 }
             }
@@ -154,6 +159,7 @@ export default function NFTBox({ price, nftAddress, tokenId, urbEAuctionAddress 
     }, [isWeb3Enabled, endTime])
 
     useEffect(() => {
+        // Calls the auctionEnd function in the smart contract when the timer reaches zero
         if (timeRemaining === 0 && !isTimeUp) {
             setIsTimeUp(true)
             callAuctionEnd()
@@ -162,25 +168,25 @@ export default function NFTBox({ price, nftAddress, tokenId, urbEAuctionAddress 
 
     async function callAuctionEnd() {
         try {
+            // Retrieves information about the listing from the auction smart contract
             const listedItem = await getListing(nftAddress, tokenId)
             const priceETH = ethers.utils.formatEther(listedItem.price)
 
+            // Formats the auction data as a JSON string and converts it to hexadecimal to write it on blockchain
             const auctionData = {
                 nftId: tokenId,
                 winner: listedItem.highestBidder,
                 priceETH: priceETH.toString(),
             }
-
             const auctionJson = JSON.stringify(auctionData)
             const auctionBytes = new TextEncoder().encode(auctionJson)
-
             const auctionHexString = []
             auctionBytes.forEach((byte) => {
                 auctionHexString.push(("0" + byte.toString(16)).slice(-2))
             })
-
             const auctionString = "0x" + auctionHexString.join("")
 
+            // Calls the auctionEnd function in the smart contract
             const auctionEndOptions = {
                 abi: urbEAuctionAbi,
                 contractAddress: urbEAuctionAddress,
@@ -203,7 +209,10 @@ export default function NFTBox({ price, nftAddress, tokenId, urbEAuctionAddress 
     }
 
     async function handleAuctionEndSuccess(tx, listedItem) {
+        // Wait for the transaction receipt
         const receipt = await tx.wait()
+
+        // If the transaction succeeded, dispatch a success notification and send a POST request to the server
         if (receipt.status === 1) {
             dispatch({
                 type: "success",
@@ -227,6 +236,8 @@ export default function NFTBox({ price, nftAddress, tokenId, urbEAuctionAddress 
             } catch (error) {
                 console.error(error)
             }
+
+            // If the transaction failed, dispatch an error notification
         } else {
             dispatch({
                 type: "error",
@@ -236,19 +247,25 @@ export default function NFTBox({ price, nftAddress, tokenId, urbEAuctionAddress 
         }
     }
 
+    // Determine if the current user is the highest bidder
     const isHighestBidder =
         highestBidder.toLowerCase() === account.toLowerCase() || highestBidder === undefined
+    // Format the highest bidder address for display
     const formattedHighestBidderAddress = isHighestBidder
         ? "You"
         : truncateStr(highestBidder || "", 15)
 
+    // Handle card click event
     const handleCardClick = async () => {
         setIsFlipped(!isFlipped)
     }
 
+    // Handle card click event
     const handleButtonClick = async () => {
+        // Determine if the current user is the seller
         const isSeller = seller.toLowerCase() === account.toLowerCase() || seller === undefined
 
+        // If the user is the seller, cancel the listing. Otherwise, show the modal.
         isSeller
             ? cancelListing({
                   onError: (error) => console.log(error),
@@ -257,6 +274,7 @@ export default function NFTBox({ price, nftAddress, tokenId, urbEAuctionAddress 
             : setShowModal(true)
     }
 
+    // Handle successful item cancelation
     const handleCancelItemSuccess = () => {
         dispatch({
             type: "success",
@@ -270,6 +288,7 @@ export default function NFTBox({ price, nftAddress, tokenId, urbEAuctionAddress 
             <div>
                 {imageURI ? (
                     <div>
+                        {/* Render an UpdateListingModal component */}
                         <UpdateListingModal
                             isVisible={showModal}
                             tokenId={tokenId}
@@ -282,14 +301,15 @@ export default function NFTBox({ price, nftAddress, tokenId, urbEAuctionAddress 
                         <div className="group [perspective:400px] hover:scale-110 transition-all duration-500">
                             <div
                                 onClick={handleCardClick}
-                                className={`relative h-[410px] !w-[250px] cursor-pointer rounded-3xl sc-iveFHk kKQXBH transition-all duration-500 [transform-style:preserve-3d]  ${
+                                className={`relative h-[410px] !w-[250px] cursor-pointer rounded-3xl border-solid border border-gray-200 dark:border-gray-700 transition-all duration-500 [transform-style:preserve-3d]  ${
                                     isFlipped ? "[transform:rotateY(180deg)]" : ""
                                 }  `}
                             >
-                                <div className="absolute h-full w-full p-5 dark:text-gray-300 [backface-visibility:hidden]">
+                                <div className="absolute h-full w-full p-5 dark:text-gray-300 rounded-3xl backdrop-blur-md [backface-visibility:hidden]">
                                     <div className="flex flex-col gap-2">
                                         <div className="flex flex-row justify-between">
                                             <div>#{tokenId}</div>
+                                            {/* Show either the remaining time or that the auction has ended */}
                                             {timeRemaining <= 0 ? (
                                                 <div className="italic text-sm">
                                                     The auction has ended
@@ -300,6 +320,7 @@ export default function NFTBox({ price, nftAddress, tokenId, urbEAuctionAddress 
                                                 </div>
                                             )}
                                         </div>
+                                        {/* Show the highest bidder or "No Bid" */}
                                         {highestBidder.toLowerCase() != seller.toLowerCase() ? (
                                             <div className="mb-5 italic text-sm self-end">
                                                 Highest bidder: {formattedHighestBidderAddress}
@@ -309,6 +330,7 @@ export default function NFTBox({ price, nftAddress, tokenId, urbEAuctionAddress 
                                                 No Bid
                                             </div>
                                         )}
+                                        {/* Render the NFT image */}
                                         <div className="h-[200px] w-[200px] relative">
                                             <Image
                                                 loader={() => imageURI}
@@ -317,15 +339,18 @@ export default function NFTBox({ price, nftAddress, tokenId, urbEAuctionAddress 
                                                 objectFit="contain"
                                             />
                                         </div>
+                                        {/* Render the price */}
                                         <div className="mt-5 font-bold self-end">
                                             {ethers.utils.formatUnits(price, "ether")} ETH
                                         </div>
                                     </div>
-                                    <div className="flex justify-center mt-3 font-semibold text-lg">
+                                    {/* Render the token name */}
+                                    <div className="flex justify-center mt-3 font-semibold text-lg text-sky-500">
                                         <h2>{tokenName}</h2>
                                     </div>
                                 </div>
-                                <div className="absolute h-full w-full p-5 flex justify-center transition duration-500 dark:text-gray-300 [transform:rotateY(180deg)] [backface-visibility:hidden]">
+                                {/* Render a button to cancel the listing or place a bid */}
+                                <div className="absolute h-full w-full p-5 flex justify-center transition duration-500 dark:text-gray-300 rounded-3xl backdrop-blur-md [transform:rotateY(180deg)] [backface-visibility:hidden]">
                                     <div className="flex  items-center">
                                         {account.toLowerCase() === seller.toLowerCase() ? (
                                             <button

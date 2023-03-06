@@ -1,16 +1,12 @@
 import { useState, useEffect, useContext } from "react"
 import { useWeb3Contract, useMoralis } from "react-moralis"
-import urbEAuctionAbi from "../constants/UrbEAuction.json"
 import nftAbi from "../constants/UrbEVehicleNft.json"
 import Image from "next/image"
-import { Card, useNotification } from "web3uikit"
 import { ethers } from "ethers"
-import UpdateListingModal from "./UpdateListingModal"
-import Web3 from "web3"
-import { format, intervalToDuration } from "date-fns"
 import { GlobalStateContext } from "@/utils/GlobalStateContext"
 import axios from "axios"
 
+// Function to truncate a string and add the separator in the middle
 const truncateStr = (fullStr, strLen) => {
     if (fullStr.length <= strLen) return fullStr
 
@@ -26,24 +22,18 @@ const truncateStr = (fullStr, strLen) => {
     )
 }
 
-export default function NFTBox({ price, nftAddress, tokenId, urbEAuctionAddress, sellerWinner }) {
-    const { chainId, isWeb3Enabled, account } = useMoralis()
+export default function OwnedNFTBox({ price, nftAddress, tokenId, sellerWinner }) {
+    // Use Moralis to get the current chain id and check if web3 is enabled
+    const { chainId, isWeb3Enabled } = useMoralis()
     const chainString = chainId ? parseInt(chainId).toString() : null
 
+    // State variables for the image URI, token name, and whether the card is flipped or not
     const [imageURI, setImageURI] = useState("")
     const [tokenName, setTokenName] = useState("")
-    const [tokenDescription, setTokenDescription] = useState("")
-    const [highestBidder, setHighestBidder] = useState("")
-    const [deployer, setDeployer] = useState("")
-    const [seller, setSeller] = useState("")
-    const [intervalId, setIntervalId] = useState(null)
-    const [isTimeUp, setIsTimeUp] = useState(false)
-    const [showModal, setShowModal] = useState(false)
     const [isFlipped, setIsFlipped] = useState(false)
-    const hideModal = () => setShowModal(false)
-    const dispatch = useNotification()
-    const { globalState, setGlobalState } = useContext(GlobalStateContext)
+    const { globalState } = useContext(GlobalStateContext)
 
+    // Get the token URI from the NFT contract and update the UI with the image and token name
     const { runContractFunction: getTokenURI } = useWeb3Contract({
         abi: nftAbi,
         contractAddress: nftAddress,
@@ -53,74 +43,36 @@ export default function NFTBox({ price, nftAddress, tokenId, urbEAuctionAddress,
         },
     })
 
-    const { runContractFunction: getDeployer } = useWeb3Contract({
-        abi: urbEAuctionAbi,
-        contractAddress: urbEAuctionAddress,
-        functionName: "getDeployer",
-        params: {},
-    })
-
-    const { runContractFunction: getListing } = useWeb3Contract({
-        abi: urbEAuctionAbi,
-        contractAddress: urbEAuctionAddress,
-        functionName: "getListing",
-        params: {
-            nftAddress: nftAddress,
-            tokenId: tokenId,
-        },
-    })
-
-    const { runContractFunction: auctionEnd } = useWeb3Contract({
-        abi: urbEAuctionAbi,
-        contractAddress: urbEAuctionAddress,
-        functionName: "auctionEnd",
-        params: {
-            nftAddress: nftAddress,
-            tokenId: tokenId,
-        },
-    })
-
     async function updateUI() {
         const tokenURI = await getTokenURI()
         if (tokenURI) {
+            // Replace the IPFS URL with a proxy URL to avoid CORS issues
             const requestURL = tokenURI.replace("ipfs://", "https://ipfs.io/ipfs/")
             const tokenURIResponse = await (await fetch(requestURL)).json()
             const imageURI = tokenURIResponse.image
             const imageURIURL = imageURI.replace("ipfs://", "https://ipfs.io/ipfs/")
             setImageURI(imageURIURL)
             setTokenName(tokenURIResponse.name)
-            setTokenDescription(tokenURIResponse.description)
         }
     }
 
+    // Update the UI when web3 is enabled
     useEffect(() => {
         if (isWeb3Enabled) {
             updateUI()
         }
     }, [isWeb3Enabled])
 
-    useEffect(() => {
-        if (isWeb3Enabled) {
-            async function initializeCard() {
-                const listedItem = await getListing(nftAddress, tokenId)
-                const highestBidder = listedItem.highestBidder
-                const seller = listedItem.seller
-                const deployer = await getDeployer()
-                setDeployer(deployer)
-                setHighestBidder(highestBidder)
-                setSeller(seller)
-            }
-            initializeCard()
-        }
-    }, [isWeb3Enabled])
-
+    // Event handler for clicking on the card
     const handleCardClick = async () => {
         setIsFlipped(!isFlipped)
     }
 
+    // Event handler for clicking on the "Check Etherscan!" button
     const handleButtonClick = async () => {
         async function fetchTxHash() {
             try {
+                // Call the backend API to fetch the transaction hash for the sale
                 const response = await axios.get("/api/fetch-txHash/", {
                     headers: {
                         tokenId: tokenId,
@@ -128,6 +80,7 @@ export default function NFTBox({ price, nftAddress, tokenId, urbEAuctionAddress,
                 })
                 const txHash = response.data.txHash
 
+                // If a transaction hash is returned, open the corresponding Etherscan link in a new tab
                 if (txHash) {
                     let etherscanLink = ""
                     if (chainString === "5") {
@@ -152,11 +105,12 @@ export default function NFTBox({ price, nftAddress, tokenId, urbEAuctionAddress,
                 <div className="group [perspective:400px] hover:scale-110 transition-all duration-500">
                     <div
                         onClick={handleCardClick}
-                        className={`h-[410px] w-[250px] relative cursor-pointer rounded-3xl transition-all duration-500 [transform-style:preserve-3d] bg-white bg-opacity-50 dark:bg-slate-800 dark:bg-opacity-50 border-solid border border-gray-200 dark:border-gray-700 ${
+                        className={`h-[410px] w-[250px] relative cursor-pointer rounded-3xl transition-all duration-500 [transform-style:preserve-3d] border-solid border border-gray-200 dark:border-gray-700 ${
                             isFlipped ? "[transform:rotateY(180deg)]" : ""
                         }  `}
                     >
-                        <div className="absolute h-full w-full p-5 dark:text-gray-300 [backface-visibility:hidden]">
+                        {/* Front of the card */}
+                        <div className="absolute h-full w-full p-5 dark:text-gray-300 rounded-3xl backdrop-blur-md [backface-visibility:hidden]">
                             <div className=" flex flex-col gap-2 ">
                                 <div className="flex flex-row items-center justify-between">
                                     <div>#{tokenId}</div>
@@ -186,7 +140,8 @@ export default function NFTBox({ price, nftAddress, tokenId, urbEAuctionAddress,
                                 <h2>{tokenName}</h2>
                             </div>
                         </div>
-                        <div className="absolute h-full w-full p-5 flex justify-center transition duration-500 dark:text-gray-300 [transform:rotateY(180deg)] [backface-visibility:hidden]">
+                        {/* Back of the card */}
+                        <div className="absolute h-full w-full p-5 flex justify-center transition duration-500 dark:text-gray-300 rounded-3xl backdrop-blur-md [transform:rotateY(180deg)] [backface-visibility:hidden]">
                             <div className="flex  items-center">
                                 <button
                                     onClick={handleButtonClick}

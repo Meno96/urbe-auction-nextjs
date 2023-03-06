@@ -20,9 +20,12 @@ export default function UpdateListingModal({
     const { runContractFunction } = useWeb3Contract()
     const csrfToken = Cookies.get("csrftoken")
 
+    // State to hold the user's updated listing price
     const [priceToUpdateListingWith, setPriceToUpdateListingWith] = useState(0)
+    // State to hold the current price of the listing
     const [price, setPrice] = useState(null)
 
+    // Function to retrieve the current price of the listing from the blockchain
     const { runContractFunction: getListing } = useWeb3Contract({
         abi: urbEAuctionAbi,
         contractAddress: urbEAuctionAddress,
@@ -33,6 +36,7 @@ export default function UpdateListingModal({
         },
     })
 
+    // Effect hook to update the current price when the component mounts or when the user changes their wallet connection status
     useEffect(() => {
         if (isWeb3Enabled) {
             async function getPrice() {
@@ -45,9 +49,12 @@ export default function UpdateListingModal({
         }
     }, [isWeb3Enabled])
 
+    // Function to handle a successful contract function call to update the listing price
     async function handleUpdateListingSuccess(tx) {
         try {
+            // Close the modal
             onClose && onClose()
+            // Wait for the transaction to be confirmed
             const receipt = await tx.wait()
             if (receipt.status === 1) {
                 dispatch({
@@ -55,6 +62,8 @@ export default function UpdateListingModal({
                     title: "Bid Placed!",
                     position: "topR",
                 })
+
+                // Submit the updated price to the server
                 const formData = new FormData()
                 formData.append("bidPrice", priceToUpdateListingWith)
                 formData.append("bidder", account)
@@ -72,6 +81,7 @@ export default function UpdateListingModal({
                 }
                 setPriceToUpdateListingWith("0")
             } else {
+                // Display an error notification if the transaction fails
                 console.error("Transaction failed")
                 dispatch({
                     type: "error",
@@ -89,6 +99,7 @@ export default function UpdateListingModal({
         }
     }
 
+    // Function to handle submit
     async function handleSubmit() {
         if (priceToUpdateListingWith > price) {
             const placeBidOptions = {
@@ -102,6 +113,7 @@ export default function UpdateListingModal({
                 },
             }
 
+            // Call placeBidFunction of the smart contract
             await runContractFunction({
                 params: placeBidOptions,
                 onError: (error) => {

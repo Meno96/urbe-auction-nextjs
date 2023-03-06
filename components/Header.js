@@ -1,16 +1,9 @@
 import { ConnectButton } from "web3uikit"
 import Link from "next/link"
-import { ThemeProvider } from "styled-components"
-import { GlobalStyles } from "../components/GlobalStyles"
-import { lightTheme, darkTheme } from "../components/Themes"
 import React, { useState, useEffect, useContext } from "react"
-import { useDarkMode } from "../components/useDarkMode"
 import Toggle from "../components/Toggler"
 import Image from "next/image"
-import urbEAuctionAbi from "../constants/UrbEAuction.json"
-import nftAbi from "../constants/UrbEVehicleNft.json"
-import { useWeb3Contract, useMoralis } from "react-moralis"
-import networkMapping from "../constants/networkMapping.json"
+import { useMoralis } from "react-moralis"
 import { useRouter } from "next/router"
 import axios from "axios"
 import { GlobalStateContext } from "../utils/GlobalStateContext"
@@ -25,28 +18,32 @@ export default function Header(props) {
     const [username, setUsername] = useState(null)
     const [isStaff, setIsStaff] = useState(null)
 
+    // Set username and isStaff values on global state change
     useEffect(() => {
         setUsername(globalState.username)
         setIsStaff(globalState.isStaff)
-        // console.log(globalState.isStaff)
     }, [globalState.username, globalState.isStaff])
 
+    // Function to handle logout
     async function handleLogout() {
         try {
-            await axios.post("https://urbe-auction.herokuapp.com/logout")
+            // Logout user and redirect to sign-in page
+            await axios.post("http://localhost:8000/logout")
             router.push("/sign-in")
         } catch (error) {
             console.error(error)
         }
     }
 
+    // Render loading message if username or isStaff values are not set yet, else render header
     if (username == null || isStaff == null) {
         return <div>Loading...</div>
     } else {
         return (
-            <nav className="px-5 border-b-[1px] border-green-600 shadow-md sticky top-0 z-10 ">
-                <div className="max-w-7xl mx-auto flex flex-row items-center justify-between backdrop-blur-lg">
+            <nav className="px-5 border-b-[1px] border-green-600 shadow-md fixed w-full top-0 z-10 backdrop-blur-lg">
+                <div className="max-w-7xl mx-auto flex flex-row items-center justify-between ">
                     <div className="flex-1">
+                        {/* Render logo and link to home page */}
                         <Link href={"/"}>
                             <div className="p-1 w-[190px] h-[60px] cursor-pointer hover:scale-125 flex items-center">
                                 <Image src="next/Logo.png" height="60" width="190" />
@@ -54,6 +51,7 @@ export default function Header(props) {
                         </Link>
                     </div>
                     <div className="flex flex-row flex-none items-center justify-center">
+                        {/* Render links to home page, add NFT page, sell NFT page, and account page */}
                         <Link href={"/"}>
                             <a
                                 className={`mr-4 p-6 hover:scale-125 ${
@@ -109,6 +107,7 @@ export default function Header(props) {
                     </div>
                     <div className="flex flex-row flex-1 w-[330px] items-center justify-end">
                         <div className="flex flex-col">
+                            {/* Display username and logout button */}
                             <div className="flex justify-center">
                                 <span>Hello, {username}</span>
                                 <a
@@ -119,8 +118,10 @@ export default function Header(props) {
                                     Logout
                                 </a>
                             </div>
+                            {/* Render the connect button */}
                             <ConnectButton moralisAuth={false} />
                         </div>
+                        {/* Render the toggle for dark mode */}
                         <Toggle theme={props.theme} toggleTheme={props.themeToggler} />
                     </div>
                 </div>

@@ -1,4 +1,4 @@
-import { Button, Notification } from "@web3uikit/core"
+import { Button } from "@web3uikit/core"
 import { useNotification } from "web3uikit"
 import { GET_BUYED_ITEMS, GET_SOLD_ITEMS } from "@/constants/subgraphQueries"
 import { useQuery } from "@apollo/client"
@@ -16,11 +16,13 @@ export default function Account() {
     const urbEAuctionAddress = chainId ? networkMapping[chainString].UrbEAuction[0] : null
     const { runContractFunction } = useWeb3Contract()
     const dispatch = useNotification()
-    const { globalState, setGlobalState } = useContext(GlobalStateContext)
+    const { globalState } = useContext(GlobalStateContext)
 
+    // Declare state variables for the UrbEAuction deployer address and proceeds
     const [deployer, setDeployer] = useState(null)
     const [proceeds, setProceeds] = useState("0")
 
+    // Retrieve the UrbEAuction deployer address using useWeb3Contract
     const { runContractFunction: getDeployer } = useWeb3Contract({
         abi: urbEAuctionAbi,
         contractAddress: urbEAuctionAddress,
@@ -29,6 +31,7 @@ export default function Account() {
         onError: (error) => console.log(error),
     })
 
+    // Retrieve the proceeds associated with the current account using useWeb3Contract
     const { runContractFunction: getProceeds } = useWeb3Contract({
         abi: urbEAuctionAbi,
         contractAddress: urbEAuctionAddress,
@@ -39,6 +42,7 @@ export default function Account() {
         onError: (error) => console.log(error),
     })
 
+    // When the component mounts, retrieve the UrbEAuction deployer address
     useEffect(() => {
         if (isWeb3Enabled) {
             async function fetchDeployer() {
@@ -49,6 +53,7 @@ export default function Account() {
         }
     }, [isWeb3Enabled])
 
+    // Query for NFTs currently owned by the current account using useQuery
     const {
         loading,
         error,
@@ -58,6 +63,7 @@ export default function Account() {
         variables: { account: account, deployer: deployer },
     })
 
+    // Query for NFTs currently sold by the current account using useQuery
     const {
         loading: loadingSold,
         error: errorSold,
@@ -87,9 +93,8 @@ export default function Account() {
     }, [proceeds, account, isWeb3Enabled, chainId])
 
     return (
-        // <div className="max-w-[1536px] min-w-[880px] w-auto mx-auto flex flex-col">
-        <div className="flex flex-col items-center">
-            <div className="border-4 border-solid border-green-600 rounded-2xl p-4 m-5 max-w-[1536px] flex flex-col transition-all duration-500 bg-white bg-opacity-25 dark:bg-slate-900 dark:bg-opacity-20 backdrop-blur-md">
+        <div className="mt-24 flex flex-col items-center">
+            <div className="border-4 border-solid border-green-600 rounded-2xl p-4 mx-5 mb-5 max-w-[1536px] flex flex-col transition-all duration-500 bg-white bg-opacity-25 dark:bg-slate-900 dark:bg-opacity-20 backdrop-blur-md">
                 {globalState.isStaff ? (
                     <h1 className="mb-5 font-bold text-2xl">Sold NFTs</h1>
                 ) : (
@@ -109,7 +114,6 @@ export default function Account() {
                                             price={price}
                                             nftAddress={nftAddress}
                                             tokenId={tokenId}
-                                            urbEAuctionAddress={urbEAuctionAddress}
                                             sellerWinner={winner}
                                             key={`${nftAddress}${tokenId}`}
                                         />

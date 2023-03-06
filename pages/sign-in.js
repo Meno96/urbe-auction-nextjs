@@ -16,6 +16,7 @@ export default function SignIn() {
     const [error, setError] = useState("")
     const [showPassword, setShowPassword] = useState(false)
 
+    // Set message state based on query param in router URL
     useEffect(() => {
         setMessage(querystring.parse(router.asPath.split(/\?/)[1]).message)
     }, [router.asPath])
@@ -26,6 +27,7 @@ export default function SignIn() {
         formState: { errors },
     } = useForm()
 
+    // Handle form submission
     const onSubmit = async (data) => {
         const username = data.username
         const password = data.password
@@ -36,17 +38,14 @@ export default function SignIn() {
         formData.append("password", password)
 
         try {
-            const response = await axios.post(
-                "https://urbe-auction.herokuapp.com/sign-in",
-                formData,
-                {
-                    headers: {
-                        "Content-Type": "multipart/form-data",
-                        "X-CSRFToken": Cookies.get("csrftoken"),
-                    },
-                }
-            )
+            const response = await axios.post("http://localhost:8000/sign-in", formData, {
+                headers: {
+                    "Content-Type": "multipart/form-data",
+                    "X-CSRFToken": Cookies.get("csrftoken"),
+                },
+            })
 
+            // If sign-in is successful, redirect to home page
             if (response.data.success) {
                 const isUserStaff = response.data.isStaff
                 if (isUserStaff) {
@@ -55,6 +54,7 @@ export default function SignIn() {
 
                 router.push("/")
             } else {
+                // If sign-in fails, display error message
                 let errorMessage = response.data.messages[0].message
                 setError(errorMessage)
                 console.log("Wrong username or password.")
@@ -64,6 +64,7 @@ export default function SignIn() {
         }
     }
 
+    // Toggle visibility of password field
     const toggleShowPassword = () => {
         setShowPassword((prevState) => !prevState)
     }
@@ -72,16 +73,19 @@ export default function SignIn() {
         <div className="w-[100%] h-[100vh] flex flex-col">
             <div className="h-[100%] flex flex-col justify-center items-center">
                 <div>
+                    {/* Success SignUp message */}
                     <div>
                         {message && message.length > 0 && (
                             <div className="text-green-600 mb-3">{message}</div>
                         )}
                     </div>
+                    {/* Sign in form */}
                     <form
                         onSubmit={handleSubmit(onSubmit)}
                         className="w-[360px] p-4 transition duration-700 text-gray-900 dark:text-gray-400 border-4 border-solid border-green-600 rounded-2xl bg-white bg-opacity-25 dark:bg-slate-900 dark:bg-opacity-20 backdrop-blur-md"
                     >
                         <p className="text-xl text-slate-500 dark:text-slate-400 mt-2">Sign In!</p>
+                        {/* Username input */}
                         <div className="relative form-group my-7">
                             <input
                                 type="text"
@@ -92,6 +96,7 @@ export default function SignIn() {
                                 }`}
                                 {...register("username", { required: true })}
                             />
+                            {/* Username error message */}
                             {errors.username && (
                                 <strong className="invalid-feedback text-red-500 ml-5 text-[12px] font-sans font-medium">
                                     This field is required
@@ -106,6 +111,7 @@ export default function SignIn() {
                                 Username*
                             </label>
                         </div>
+                        {/* Password input */}
                         <div className="relative form-group my-7">
                             <input
                                 type={showPassword ? "text" : "password"}
@@ -116,6 +122,7 @@ export default function SignIn() {
                                 }`}
                                 {...register("password", { required: true })}
                             />
+                            {/* Show/hide password button */}
                             <button
                                 type="button"
                                 className="absolute top-2 right-5 text-gray-900 dark:text-gray-400 hover:text-sky-600 transition duration-500"
@@ -158,6 +165,7 @@ export default function SignIn() {
                                     </svg>
                                 )}
                             </button>
+                            {/* Show error if required field is empty */}
                             {errors.password && (
                                 <strong className="invalid-feedback text-red-500 ml-5 text-[12px] font-sans font-medium">
                                     This field is required
@@ -172,6 +180,7 @@ export default function SignIn() {
                                 Password*
                             </label>
                         </div>
+                        {/* Submit button */}
                         <button
                             type="submit"
                             className="btn btn-outline-primary px-3 py-1 rounded-xl border-2 font-semibold text-[14px] hover:scale-125 transition ease-out duration-500 border-green-600 dark:bg-green-600 text-slate-800"

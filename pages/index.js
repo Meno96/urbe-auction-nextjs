@@ -17,6 +17,7 @@ export default function Home() {
     const urbEAuctionAddress = chainId ? networkMapping[chainString].UrbEAuction[0] : null
     const { globalState, setGlobalState } = useContext(GlobalStateContext)
 
+    // Query for get listed NFTs
     const {
         loading,
         error,
@@ -24,18 +25,18 @@ export default function Home() {
         startPolling,
         stopPolling,
     } = useQuery(GET_ACTIVE_ITEMS, {
-        pollInterval: 1000, // polling ogni 5 secondi
+        pollInterval: 1000, // polling every 1s
     })
 
     useEffect(() => {
         if (isWeb3Enabled && chainId) {
-            startPolling(1000) // avvia il polling all'avvio della componente
-            return () => stopPolling() // ferma il polling quando la componente viene smontata
+            startPolling(1000)
+            return () => stopPolling()
         }
     }, [isWeb3Enabled, chainId, startPolling, stopPolling])
 
     return (
-        <div className="container mx-auto">
+        <div className="container mx-auto mt-24">
             {globalState.checkIp && (
                 <div className="flex justify-center">
                     <p className="p-5 text-red-600 font-semibold">

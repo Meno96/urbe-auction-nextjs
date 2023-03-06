@@ -1,6 +1,7 @@
 import React from "react"
 import { func, string } from "prop-types"
 
+// Component for toggling between light and dark themes
 const Toggle = ({ theme, toggleTheme }) => {
     if (theme == "light") {
         return (
@@ -45,4 +46,5 @@ Toggle.propTypes = {
     theme: string.isRequired,
     toggleTheme: func.isRequired,
 }
+
 export default Toggle
