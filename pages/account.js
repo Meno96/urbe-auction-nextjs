@@ -13,7 +13,9 @@ import { GlobalStateContext } from "../utils/GlobalStateContext"
 export default function Account() {
     const { chainId, isWeb3Enabled, account } = useMoralis()
     const chainString = chainId ? parseInt(chainId).toString() : null
-    const urbEAuctionAddress = chainId ? networkMapping[chainString].UrbEAuction[0] : null
+    const urbEAuctionAddress = chainId
+        ? networkMapping[chainString].UrbEAuction.slice(-1)[0]
+        : null
     const { runContractFunction } = useWeb3Contract()
     const dispatch = useNotification()
     const { globalState } = useContext(GlobalStateContext)

@@ -12,8 +12,12 @@ export default function SellNft() {
     // Get contract addresses based on chainId from networkMapping object
     const { chainId, isWeb3Enabled } = useMoralis()
     const chainString = chainId ? parseInt(chainId).toString() : null
-    const urbEAuctionAddress = chainId ? networkMapping[chainString].UrbEAuction[0] : null
-    const urbEVehicleNftAddress = chainId ? networkMapping[chainString].UrbEVehicleNft[0] : null
+    const urbEAuctionAddress = chainId
+        ? networkMapping[chainString].UrbEAuction.slice(-1)[0]
+        : null
+    const urbEVehicleNftAddress = chainId
+        ? networkMapping[chainString].UrbEVehicleNft.slice(-1)[0]
+        : null
 
     // Get dispatch function from useNotification hook
     const dispatch = useNotification()

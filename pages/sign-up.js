@@ -43,16 +43,12 @@ export default function SignIn() {
 
             try {
                 // Send the form data to the server
-                const response = await axios.post(
-                    "https://urbe-auction.herokuapp.com/sign-up",
-                    formData,
-                    {
-                        headers: {
-                            "Content-Type": "multipart/form-data",
-                            "X-CSRFToken": csrfToken,
-                        },
-                    }
-                )
+                const response = await axios.post("/sign-up", formData, {
+                    headers: {
+                        "Content-Type": "multipart/form-data",
+                        "X-CSRFToken": csrfToken,
+                    },
+                })
 
                 // If the server returns a success message, redirect to the sign-in page
                 if (response.data.success) {

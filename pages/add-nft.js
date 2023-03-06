@@ -12,7 +12,9 @@ export default function AddNft() {
     const chainString = chainId ? parseInt(chainId).toString() : null
 
     // Get UrbEVehicleNft contract address from networkMapping based on chain ID
-    const urbEVehicleNftAddress = chainId ? networkMapping[chainString].UrbEVehicleNft[0] : null
+    const urbEVehicleNftAddress = chainId
+        ? networkMapping[chainString].UrbEVehicleNft.slice(-1)[0]
+        : null
 
     // Get runContractFunction and dispatch function using custom hooks
     const { runContractFunction } = useWeb3Contract()

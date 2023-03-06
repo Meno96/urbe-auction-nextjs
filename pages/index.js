@@ -14,7 +14,9 @@ import { GlobalStateContext } from "../utils/GlobalStateContext"
 export default function Home() {
     const { chainId, isWeb3Enabled } = useMoralis()
     const chainString = chainId ? parseInt(chainId).toString() : null
-    const urbEAuctionAddress = chainId ? networkMapping[chainString].UrbEAuction[0] : null
+    const urbEAuctionAddress = chainId
+        ? networkMapping[chainString].UrbEAuction.slice(-1)[0]
+        : null
     const { globalState, setGlobalState } = useContext(GlobalStateContext)
 
     // Query for get listed NFTs
