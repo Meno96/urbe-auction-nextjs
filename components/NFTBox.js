@@ -3,11 +3,9 @@ import { useWeb3Contract, useMoralis } from "react-moralis"
 import urbEAuctionAbi from "../constants/UrbEAuction.json"
 import nftAbi from "../constants/UrbEVehicleNft.json"
 import Image from "next/image"
-import { Card, useNotification } from "web3uikit"
+import { useNotification } from "web3uikit"
 import { ethers } from "ethers"
 import UpdateListingModal from "./UpdateListingModal"
-import Web3 from "web3"
-import { format, intervalToDuration } from "date-fns"
 import axios from "axios"
 import Cookies from "js-cookie"
 
@@ -156,7 +154,7 @@ export default function NFTBox({ price, nftAddress, tokenId, urbEAuctionAddress 
 
             initializeCard()
         }
-    }, [isWeb3Enabled, endTime])
+    }, [isWeb3Enabled])
 
     useEffect(() => {
         // Calls the auctionEnd function in the smart contract when the timer reaches zero
