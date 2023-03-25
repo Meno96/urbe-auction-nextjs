@@ -5,7 +5,7 @@
 <br/>
 
 <p align="center">
-    <img width="80%" src="../assets/GitHubImages/Admin-Homepage2.png" alt="UrbE Auction Homepage">
+    <img width="80%" src="./assets/GitHubImages/Admin-Homepage2.png" alt="UrbE Auction Homepage">
 </a>
 </p>
 
