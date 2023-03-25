@@ -5,7 +5,7 @@
 <br/>
 
 <p align="center">
-<img src="./assets/GitHubImages/Admin-Homepage2.png" width="80%" alt="UrbE Auction Homepage">
+    <img src="./assets/GitHubImages/Admin-Homepage2.png" width="80%" alt="UrbE Auction Homepage">
 </a>
 </p>
 
@@ -13,7 +13,7 @@
 
 This project is a web application for a charity auction organized by UrbE, a micromobility company.
 
-The repo in question is responsible for the frontend of the web application and uses Next.js, a React framework, to handle it. It includes pages, components, and styles for the different sections of the application, such as the home page, auction details page, and user dashboard. It also communicates with the backend of the application, which is built using Django and hosted on Moralis, to fetch and display data such as the current auctions, bids, and user information. Additionally, it integrates with Moralis and Web3 to handle Ethereum transactions, including minting and bidding on NFTs.
+The repo in question is responsible for the frontend of the web application and uses Next.js, a React framework, to handle it. It includes pages, components, and styles for different sections of the application, such as the home page, auction details page, and user dashboard. It also communicates with the backend of the application, which is built using Django and hosted on Moralis, to fetch and display data such as the current auctions, bids, and user information. Additionally, it integrates with Moralis and Web3 to handle Ethereum transactions, including minting and bidding on NFTs.
 
 In addition to communicating with the backend, the frontend also integrates with The Graph to index events and perform queries on the Ethereum blockchain. This allows the application to display real-time data on auctions and bids and update the UI accordingly.
 
@@ -120,7 +120,7 @@ Open [http://127.0.0.1:8000/](http://127.0.0.1:8000/) in your browser
 
 ## 🚀&nbsp; How it's suppose to work?
 
-The platform is based on the sale of NFTs that represent real objects, whoever appropriates the NFT at auction has the right to receive the object in question, and thanks to the blockchain this process is completely transparent.
+The platform is based on the sale of NFTs that represent real objects, whoever wins the auction for the NFT has the right to receive the corresponding object, and thanks to the blockchain this process is completely transparent.
 
 The whole thing is based on two smart contracts (which can be seen in the Hardhat repo):
 * UrbEVehicleNft: manages the various Nfts, there is the possibility to add any type of Nft to the collection when you want.
